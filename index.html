@@ -1,0 +1,1682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PI AgSciences + Salesforce | Digital Proposal</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --sf-blue:#0176d3;--sf-dark:#032d60;--sf-light:#e8f4fd;--sf-accent:#1b96ff;
+  --green:#2e844a;--green-light:#e3f5e8;--orange:#fe9339;--orange-light:#fff3e0;
+  --red:#ea001e;--gray-100:#f3f3f3;--gray-200:#e5e5e5;--gray-600:#706e6b;
+  --gray-800:#3e3e3c;--white:#fff;--shadow:0 2px 12px rgba(0,0,0,.08);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.12);--radius:12px;--radius-lg:20px;
+  --font:'Segoe UI',system-ui,-apple-system,sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);color:var(--gray-800);line-height:1.6;background:var(--gray-100);overflow-x:hidden}
+a{color:var(--sf-blue);text-decoration:none}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+section{padding:80px 0}
+h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:800;line-height:1.15}
+h2{font-size:clamp(1.5rem,3.5vw,2.2rem);font-weight:700;line-height:1.2;margin-bottom:16px}
+h3{font-size:1.25rem;font-weight:600}
+.section-label{display:inline-block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--sf-blue);margin-bottom:8px}
+.section-subtitle{font-size:1.1rem;color:var(--gray-600);max-width:640px;margin:0 auto 48px}
+.text-center{text-align:center}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:8px;font-weight:600;font-size:1rem;border:none;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--sf-blue);color:#fff}.btn-primary:hover{background:var(--sf-dark);transform:translateY(-1px)}
+.btn-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.5)}.btn-outline:hover{border-color:#fff;background:rgba(255,255,255,.1)}
+.btn-white{background:#fff;color:var(--sf-dark)}.btn-white:hover{background:var(--sf-light)}
+.grid{display:grid;gap:24px}
+.grid-2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.grid-3{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.grid-4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.card{background:var(--white);border-radius:var(--radius);padding:32px;box-shadow:var(--shadow);transition:all .3s}
+.card:hover{box-shadow:var(--shadow-lg);transform:translateY(-4px)}
+.tag{display:inline-block;padding:4px 12px;border-radius:20px;font-size:.75rem;font-weight:600}
+.fade-in{opacity:0;transform:translateY(30px);transition:all .6s ease-out}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+
+/* ===== NAV ===== */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--gray-200);padding:12px 0;transition:all .3s}
+nav.scrolled{box-shadow:var(--shadow)}
+nav .container{display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.05rem;color:var(--sf-dark)}
+.nav-brand .brand-logo{height:28px;width:auto}
+.nav-brand .brand-divider{width:1px;height:24px;background:var(--gray-200)}
+.nav-brand .brand-pi{display:flex;align-items:center;gap:6px;font-weight:800;font-size:.95rem;color:#1a5cff;letter-spacing:-.02em}
+.nav-brand .brand-pi .pi-logo{height:26px;width:auto}
+.nav-brand .brand-sf-text{font-size:.8rem;color:var(--gray-600);font-weight:500}
+.nav-links{display:flex;gap:8px;list-style:none}
+.nav-links a{padding:8px 16px;border-radius:6px;font-size:.875rem;font-weight:500;color:var(--gray-600);transition:all .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--sf-blue);background:var(--sf-light)}
+@media(max-width:768px){.nav-links{display:none}}
+
+/* ===== HERO ===== */
+.hero{padding:140px 0 80px;background:linear-gradient(135deg,var(--sf-dark) 0%,#0b3d91 50%,var(--sf-blue) 100%);color:#fff;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;right:-20%;width:600px;height:600px;border-radius:50%;background:rgba(255,255,255,.03);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:-30%;left:-10%;width:400px;height:400px;border-radius:50%;background:rgba(255,255,255,.02);pointer-events:none}
+.hero .container{position:relative;z-index:1}
+.hero-content{max-width:720px}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);padding:8px 16px;border-radius:20px;font-size:.8rem;font-weight:600;margin-bottom:24px;border:1px solid rgba(255,255,255,.15)}
+.hero h1{margin-bottom:20px}
+.hero p{font-size:1.15rem;opacity:.85;max-width:560px;margin-bottom:32px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:64px}
+.stat-card{background:rgba(255,255,255,.08);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);padding:24px;text-align:center;transition:all .3s}
+.stat-card:hover{background:rgba(255,255,255,.14);transform:translateY(-2px)}
+.stat-value{font-size:2rem;font-weight:800;margin-bottom:4px}
+.stat-label{font-size:.8rem;opacity:.7;text-transform:uppercase;letter-spacing:1px}
+@media(max-width:768px){.hero-stats{grid-template-columns:repeat(2,1fr)}}
+
+/* ===== CHALLENGE FLIP CARDS ===== */
+.challenges{background:var(--white)}
+.flip-card{perspective:1000px;height:280px;cursor:pointer}
+.flip-card-inner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.flip-card.flipped .flip-card-inner{transform:rotateY(180deg)}
+.flip-card-front,.flip-card-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:var(--radius);padding:32px;display:flex;flex-direction:column;justify-content:center}
+.flip-card-front{background:linear-gradient(135deg,#fff5f5,#ffe8e8);border:2px solid #fecaca}
+.flip-card-back{background:linear-gradient(135deg,var(--sf-light),#d1ecf9);border:2px solid #90caf9;transform:rotateY(180deg)}
+.flip-icon{font-size:2rem;margin-bottom:12px}
+.flip-card h3{margin-bottom:8px}
+.flip-card p{font-size:.9rem;color:var(--gray-600);line-height:1.5}
+.flip-hint{position:absolute;bottom:12px;right:16px;font-size:.7rem;color:var(--gray-600);opacity:.6}
+
+/* ===== PRODUCT CARDS ===== */
+.products{background:var(--gray-100)}
+.product-card{background:var(--white);border-radius:var(--radius-lg);overflow:hidden;transition:all .3s;cursor:pointer;border:2px solid transparent}
+.product-card:hover{border-color:var(--sf-blue);box-shadow:var(--shadow-lg)}
+.product-card.expanded .product-details{max-height:600px;opacity:1;padding:0 32px 32px}
+.product-header{padding:32px;display:flex;align-items:flex-start;gap:16px}
+.product-icon{width:56px;height:56px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
+.product-icon.sales{background:linear-gradient(135deg,#0176d3,#032d60)}
+.product-icon.marketing{background:linear-gradient(135deg,#fe9339,#d97706)}
+.product-icon.agent{background:linear-gradient(135deg,#2e844a,#1a5c2e)}
+.product-info h3{margin-bottom:4px}
+.product-info .price{font-size:1.4rem;font-weight:800;color:var(--sf-dark)}
+.product-info .price-detail{font-size:.8rem;color:var(--gray-600)}
+.product-features{display:flex;flex-wrap:wrap;gap:8px;padding:0 32px 24px}
+.product-features .tag{background:var(--sf-light);color:var(--sf-dark);font-size:.7rem}
+.product-details{max-height:0;opacity:0;overflow:hidden;transition:all .4s ease}
+.product-details ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.product-details li{font-size:.875rem;padding:6px 0;padding-left:20px;position:relative}
+.product-details li::before{content:'✓';position:absolute;left:0;color:var(--green);font-weight:700}
+.expand-hint{padding:0 32px 16px;font-size:.75rem;color:var(--sf-blue);font-weight:500}
+
+/* ===== SPROUT SOCIAL ===== */
+.sprout-social{background:linear-gradient(135deg,#2c5234 0%,#1a5cff 100%);color:#fff;position:relative;overflow:hidden}
+.sprout-social::before{content:'';position:absolute;top:-30%;right:-15%;width:500px;height:500px;border-radius:50%;background:rgba(255,255,255,.04);pointer-events:none}
+.sprout-hero-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:center}
+.sprout-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:32px}
+.sprout-stat{background:rgba(255,255,255,.1);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.15);border-radius:var(--radius);padding:20px;text-align:center}
+.sprout-stat .stat-num{font-size:1.6rem;font-weight:800}
+.sprout-stat .stat-desc{font-size:.75rem;opacity:.7;margin-top:2px}
+.sprout-products{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:32px}
+.sprout-product{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);padding:20px;text-align:center;transition:all .3s}
+.sprout-product:hover{background:rgba(255,255,255,.15);transform:translateY(-2px)}
+.sprout-product .sp-icon{font-size:1.5rem;margin-bottom:8px}
+.sprout-product h4{font-size:.9rem;margin-bottom:4px}
+.sprout-product p{font-size:.75rem;opacity:.7}
+.sprout-integrations{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:32px}
+.sprout-integration{background:var(--white);border-radius:var(--radius);padding:20px;color:var(--gray-800);display:flex;align-items:flex-start;gap:12px;transition:all .3s}
+.sprout-integration:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+.sprout-integration .int-icon{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.sprout-integration h4{font-size:.9rem;margin-bottom:4px}
+.sprout-integration p{font-size:.78rem;color:var(--gray-600);line-height:1.4}
+.sprout-roi-bar{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap;justify-content:center}
+.sprout-roi-item{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:var(--radius);padding:16px 24px;text-align:center;flex:1;min-width:140px}
+.sprout-roi-item .roi-num{font-size:1.4rem;font-weight:800}
+.sprout-roi-item .roi-desc{font-size:.7rem;opacity:.7;margin-top:2px}
+@media(max-width:900px){.sprout-hero-grid{grid-template-columns:1fr}}
+
+/* ===== PHONE DEMO ===== */
+.phone-demo{background:linear-gradient(135deg,var(--sf-dark),#0b3d91);color:#fff;position:relative;overflow:hidden}
+.phone-demo-layout{display:grid;grid-template-columns:1fr 340px;gap:48px;align-items:center}
+.phone-frame{width:300px;height:600px;border-radius:40px;border:4px solid rgba(255,255,255,.2);background:#111;padding:16px;position:relative;margin:0 auto;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.phone-notch{width:120px;height:24px;background:#111;border-radius:0 0 16px 16px;position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:2}
+.phone-screen{width:100%;height:100%;border-radius:28px;background:var(--white);overflow:hidden;position:relative}
+.phone-status-bar{height:44px;background:var(--sf-blue);display:flex;align-items:center;justify-content:space-between;padding:0 20px;color:#fff;font-size:.7rem;font-weight:600}
+.phone-content{padding:16px;height:calc(100% - 44px);overflow-y:auto}
+.phone-content h4{color:var(--sf-dark);margin-bottom:12px;font-size:.95rem}
+.phone-content .mini-card{background:var(--gray-100);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.8rem;color:var(--gray-800)}
+.phone-content .mini-card .label{font-size:.65rem;color:var(--gray-600);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.phone-content .mini-card .value{font-weight:700;font-size:.95rem}
+.phone-content .mini-metric{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--gray-200);font-size:.8rem}
+.phone-content .mini-metric:last-child{border:none}
+.phone-content .mini-btn{width:100%;padding:10px;background:var(--sf-blue);color:#fff;border:none;border-radius:8px;font-size:.8rem;font-weight:600;margin-top:8px;cursor:pointer}
+.demo-steps{display:flex;flex-direction:column;gap:12px}
+.demo-step{padding:16px 20px;border-radius:var(--radius);border:2px solid rgba(255,255,255,.1);cursor:pointer;transition:all .3s}
+.demo-step:hover,.demo-step.active{border-color:var(--sf-accent);background:rgba(255,255,255,.06)}
+.demo-step .step-num{font-size:.7rem;font-weight:700;opacity:.5;margin-bottom:4px}
+.demo-step h4{font-size:.95rem;margin-bottom:4px}
+.demo-step p{font-size:.8rem;opacity:.7}
+@media(max-width:900px){.phone-demo-layout{grid-template-columns:1fr;text-align:center}}
+
+/* ===== BEFORE / AFTER ===== */
+.before-after{background:var(--white)}
+.toggle-container{display:flex;justify-content:center;margin-bottom:40px;gap:0}
+.toggle-btn{padding:14px 36px;font-size:1rem;font-weight:600;border:2px solid var(--gray-200);background:var(--white);cursor:pointer;transition:all .2s;color:var(--gray-600)}
+.toggle-btn:first-child{border-radius:8px 0 0 8px}
+.toggle-btn:last-child{border-radius:0 8px 8px 0}
+.toggle-btn.active{background:var(--sf-blue);color:#fff;border-color:var(--sf-blue)}
+.comparison-panel{display:none}.comparison-panel.active{display:block}
+.comparison-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.comparison-item{padding:24px;border-radius:var(--radius);border:1px solid var(--gray-200)}
+.comparison-item.before{background:#fff5f5;border-color:#fecaca}
+.comparison-item.after{background:var(--green-light);border-color:#a5d6a7}
+.comparison-item h4{font-size:.95rem;margin-bottom:8px}
+.comparison-item p{font-size:.85rem;color:var(--gray-600)}
+
+/* ===== DASHBOARD ===== */
+.dashboard{background:var(--gray-100)}
+.dash-tabs{display:flex;gap:4px;margin-bottom:24px;background:var(--white);border-radius:8px;padding:4px;box-shadow:var(--shadow)}
+.dash-tab{padding:10px 24px;border-radius:6px;font-size:.875rem;font-weight:600;border:none;background:transparent;cursor:pointer;color:var(--gray-600);transition:all .2s}
+.dash-tab.active{background:var(--sf-blue);color:#fff}
+.dash-panel{display:none}.dash-panel.active{display:block}
+.dash-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.dash-metric{background:var(--white);border-radius:var(--radius);padding:20px;text-align:center;box-shadow:var(--shadow)}
+.dash-metric .metric-value{font-size:1.6rem;font-weight:800;color:var(--sf-dark)}
+.dash-metric .metric-label{font-size:.75rem;color:var(--gray-600);margin-top:4px}
+.dash-metric .metric-change{font-size:.7rem;font-weight:600;margin-top:4px}
+.dash-metric .metric-change.up{color:var(--green)}
+.dash-metric .metric-change.down{color:var(--red)}
+.dash-chart{background:var(--white);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);min-height:200px}
+.bar-chart{display:flex;align-items:flex-end;gap:12px;height:180px;padding-top:20px}
+.bar-group{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bar{width:100%;border-radius:6px 6px 0 0;transition:height .6s ease;min-height:4px}
+.bar.blue{background:linear-gradient(180deg,var(--sf-blue),var(--sf-dark))}
+.bar.green{background:linear-gradient(180deg,var(--green),#1a5c2e)}
+.bar.orange{background:linear-gradient(180deg,var(--orange),#d97706)}
+.bar-label{font-size:.7rem;color:var(--gray-600);font-weight:500}
+.bar-value{font-size:.7rem;font-weight:700;color:var(--sf-dark)}
+@media(max-width:768px){.dash-metrics{grid-template-columns:repeat(2,1fr)}}
+
+/* ===== ROI CALCULATOR ===== */
+.roi-calc{background:var(--white)}
+.calc-layout{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.calc-inputs{display:flex;flex-direction:column;gap:24px}
+.slider-group label{display:flex;justify-content:space-between;font-size:.9rem;font-weight:600;margin-bottom:8px}
+.slider-group label span{color:var(--sf-blue)}
+.slider-group input[type=range]{width:100%;height:6px;border-radius:3px;-webkit-appearance:none;appearance:none;background:var(--gray-200);outline:none}
+.slider-group input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--sf-blue);cursor:pointer;box-shadow:0 2px 8px rgba(1,118,211,.3)}
+.calc-results{background:linear-gradient(135deg,var(--sf-dark),#0b3d91);color:#fff;border-radius:var(--radius-lg);padding:36px;position:sticky;top:100px}
+.calc-results h3{margin-bottom:24px;font-size:1.3rem}
+.result-row{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+.result-row:last-child{border:none}
+.result-label{font-size:.9rem;opacity:.8}
+.result-value{font-size:1.2rem;font-weight:800}
+.result-highlight{background:rgba(255,255,255,.1);border-radius:var(--radius);padding:20px;margin-top:20px;text-align:center}
+.result-highlight .big-number{font-size:2.5rem;font-weight:800}
+.result-highlight p{font-size:.85rem;opacity:.7;margin-top:4px}
+@media(max-width:768px){.calc-layout{grid-template-columns:1fr}}
+
+/* ===== WHY NOW ===== */
+.why-now{background:linear-gradient(135deg,var(--orange),#e65100);color:#fff;text-align:center}
+.why-now h2{color:#fff}
+.why-now-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;margin-top:40px}
+.why-now-item{background:rgba(255,255,255,.12);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.15);border-radius:var(--radius);padding:28px;text-align:center}
+.why-now-item .icon{font-size:2rem;margin-bottom:12px}
+.why-now-item h4{margin-bottom:8px}
+.why-now-item p{font-size:.85rem;opacity:.8}
+
+/* ===== ROADMAP ===== */
+.roadmap{background:var(--white)}
+.timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:0;position:relative;margin-top:48px}
+.timeline::before{content:'';position:absolute;top:36px;left:10%;right:10%;height:4px;background:var(--gray-200);border-radius:2px}
+.phase{text-align:center;position:relative;padding:0 16px}
+.phase-dot{width:28px;height:28px;border-radius:50%;background:var(--sf-blue);margin:22px auto 20px;position:relative;z-index:1;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.7rem;font-weight:700}
+.phase h3{margin-bottom:8px}
+.phase p{font-size:.85rem;color:var(--gray-600)}
+.phase ul{list-style:none;margin-top:12px;text-align:left}
+.phase li{font-size:.82rem;padding:4px 0;padding-left:16px;position:relative;color:var(--gray-600)}
+.phase li::before{content:'→';position:absolute;left:0;color:var(--sf-blue)}
+@media(max-width:768px){.timeline{grid-template-columns:1fr;gap:32px}.timeline::before{display:none}}
+
+/* ===== TEAM ===== */
+.team{background:var(--gray-100)}
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px}
+.team-card{background:var(--white);border-radius:var(--radius);padding:28px;text-align:center;box-shadow:var(--shadow)}
+.team-avatar{width:64px;height:64px;border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:700;color:#fff}
+.team-card h4{margin-bottom:4px}
+.team-card .role{font-size:.8rem;color:var(--gray-600);margin-bottom:12px}
+.team-card .contact{font-size:.8rem;color:var(--sf-blue)}
+
+/* ===== CTA FOOTER ===== */
+.cta-section{background:linear-gradient(135deg,var(--sf-dark),#0b3d91,var(--sf-blue));color:#fff;text-align:center;padding:100px 0}
+.cta-section h2{color:#fff;font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:16px}
+.cta-section p{font-size:1.1rem;opacity:.8;max-width:560px;margin:0 auto 36px}
+.cta-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+footer{background:var(--sf-dark);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.75rem}
+
+/* ===== ANIMATED COUNTERS ===== */
+.counter{display:inline-block;font-variant-numeric:tabular-nums}
+
+/* ===== PULSE INDICATOR ===== */
+.pulse-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;vertical-align:middle;animation:pulse-ring 1.5s ease-in-out infinite}
+.pulse-dot.live{background:#2e844a}
+.pulse-dot.warn{background:#fe9339}
+.pulse-dot.danger{background:#ea001e}
+@keyframes pulse-ring{0%,100%{opacity:1;box-shadow:0 0 0 0 currentColor}50%{opacity:.8;box-shadow:0 0 0 6px transparent}}
+
+/* ===== SHIMMER / AI THINKING ===== */
+.shimmer{position:relative;overflow:hidden}
+.shimmer::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);animation:shimmer-slide 2s ease-in-out infinite}
+@keyframes shimmer-slide{0%{left:-100%}100%{left:200%}}
+.ai-thinking{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:600;color:var(--sf-blue);padding:6px 14px;background:var(--sf-light);border-radius:20px}
+.ai-thinking .dots span{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--sf-blue);margin:0 1px;animation:dot-bounce .6s ease-in-out infinite}
+.ai-thinking .dots span:nth-child(2){animation-delay:.15s}
+.ai-thinking .dots span:nth-child(3){animation-delay:.3s}
+@keyframes dot-bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+
+/* ===== AI ARCHITECTURE STACK ===== */
+.ai-stack{background:var(--white)}
+.stack-layout{display:grid;grid-template-columns:340px 1fr;gap:48px;align-items:start}
+.stack-layers{display:flex;flex-direction:column;gap:0}
+.stack-layer{padding:20px 24px;border:2px solid var(--gray-200);cursor:pointer;transition:all .3s;position:relative;display:flex;align-items:center;gap:14px}
+.stack-layer:first-child{border-radius:var(--radius) var(--radius) 0 0}
+.stack-layer:last-child{border-radius:0 0 var(--radius) var(--radius)}
+.stack-layer:not(:first-child){border-top:none}
+.stack-layer.active{border-color:var(--sf-blue);background:var(--sf-light);z-index:1;border-top:2px solid var(--sf-blue)}
+.stack-layer.active+.stack-layer{border-top:none}
+.stack-layer .layer-icon{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.stack-layer .layer-name{font-weight:700;font-size:.95rem}
+.stack-layer .layer-sub{font-size:.75rem;color:var(--gray-600)}
+.stack-detail{background:var(--white);border-radius:var(--radius-lg);padding:36px;box-shadow:var(--shadow-lg);border:1px solid var(--gray-200)}
+.stack-detail h3{margin-bottom:8px;font-size:1.2rem}
+.stack-detail .detail-desc{font-size:.9rem;color:var(--gray-600);margin-bottom:20px;line-height:1.6}
+.stack-detail-features{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stack-detail-features li{font-size:.85rem;padding:8px 12px;background:var(--gray-100);border-radius:8px;list-style:none;display:flex;align-items:center;gap:8px}
+.stack-detail-features li::before{content:'✦';color:var(--sf-blue);font-size:.7rem}
+@media(max-width:900px){.stack-layout{grid-template-columns:1fr}}
+
+/* ===== CONNECTED OPERATIONS DIAGRAM ===== */
+.connected-ops{background:var(--gray-100)}
+.ops-diagram{display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:center;margin-top:40px}
+.ops-before,.ops-after{display:flex;flex-direction:column;gap:12px}
+.ops-tool{padding:14px 18px;border-radius:var(--radius);font-size:.85rem;font-weight:600;display:flex;align-items:center;gap:10px;transition:all .6s ease}
+.ops-tool .tool-icon{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.ops-hub{width:140px;height:140px;border-radius:50%;background:linear-gradient(135deg,var(--sf-blue),var(--sf-dark));display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;box-shadow:0 8px 32px rgba(1,118,211,.3);position:relative}
+.ops-hub::before{content:'';position:absolute;inset:-8px;border-radius:50%;border:2px dashed rgba(1,118,211,.3);animation:spin-slow 20s linear infinite}
+@keyframes spin-slow{to{transform:rotate(360deg)}}
+.ops-hub .hub-icon{font-size:2rem;margin-bottom:4px}
+.ops-hub .hub-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.ops-connector{display:flex;align-items:center;gap:4px;font-size:.75rem;color:var(--gray-600)}
+.ops-connector .line{flex:1;height:2px;background:var(--gray-200)}
+.ops-before .ops-tool{background:#fff5f5;border:1px solid #fecaca;color:var(--gray-800)}
+.ops-after .ops-tool{background:var(--sf-light);border:1px solid #90caf9;color:var(--sf-dark)}
+@media(max-width:768px){.ops-diagram{grid-template-columns:1fr;text-align:center}.ops-hub{margin:20px auto}}
+
+/* ===== LIGHTNING DASHBOARD MOCK ===== */
+.lightning-dash{background:var(--white)}
+.browser-frame{border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-lg);border:1px solid var(--gray-200)}
+.browser-chrome{background:#f8f8f8;padding:10px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--gray-200)}
+.browser-dots{display:flex;gap:6px}
+.browser-dots span{width:10px;height:10px;border-radius:50%}
+.browser-dots span:nth-child(1){background:#ff5f57}
+.browser-dots span:nth-child(2){background:#ffbd2e}
+.browser-dots span:nth-child(3){background:#28c840}
+.browser-url{flex:1;background:var(--white);border-radius:4px;padding:6px 12px;font-size:.75rem;color:var(--gray-600);border:1px solid var(--gray-200);font-family:var(--font)}
+.browser-body{display:grid;grid-template-columns:56px 1fr;min-height:480px}
+.dash-sidebar{background:var(--sf-dark);padding:12px 0;display:flex;flex-direction:column;align-items:center;gap:16px}
+.dash-sidebar .sidebar-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9rem;color:rgba(255,255,255,.5);transition:all .2s;cursor:pointer}
+.dash-sidebar .sidebar-icon:hover,.dash-sidebar .sidebar-icon.active{background:rgba(255,255,255,.1);color:#fff}
+.dash-main{background:var(--gray-100);padding:20px}
+.dash-topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.dash-topbar h3{font-size:1rem;color:var(--sf-dark)}
+.dash-topbar .live-badge{display:inline-flex;align-items:center;gap:4px;font-size:.7rem;font-weight:600;padding:4px 10px;border-radius:12px;background:var(--green-light);color:var(--green)}
+.dash-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.dash-kpi{background:var(--white);border-radius:8px;padding:16px;box-shadow:var(--shadow)}
+.dash-kpi .kpi-label{font-size:.7rem;color:var(--gray-600);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.dash-kpi .kpi-value{font-size:1.3rem;font-weight:800;color:var(--sf-dark)}
+.dash-kpi .kpi-delta{font-size:.7rem;font-weight:600;margin-top:2px}
+.dash-kpi .kpi-delta.up{color:var(--green)}
+.dash-kpi .kpi-delta.down{color:var(--red)}
+.agent-banner{background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;border-radius:8px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;gap:12px;font-size:.85rem}
+.agent-banner .agent-icon{font-size:1.3rem}
+.agent-banner strong{font-weight:700}
+.dash-grid-lower{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.dash-grid-lower .dash-widget{background:var(--white);border-radius:8px;padding:16px;box-shadow:var(--shadow)}
+.dash-widget h4{font-size:.85rem;margin-bottom:12px;color:var(--sf-dark)}
+.mini-pipeline{display:flex;flex-direction:column;gap:6px}
+.mini-pipeline-row{display:flex;align-items:center;gap:8px;font-size:.8rem}
+.mini-pipeline-row .stage-bar{height:8px;border-radius:4px;background:var(--sf-blue)}
+.mini-pipeline-row .stage-name{width:80px;font-size:.7rem;color:var(--gray-600)}
+.mini-pipeline-row .stage-val{font-size:.75rem;font-weight:700;color:var(--sf-dark)}
+.mini-activity-list{display:flex;flex-direction:column;gap:8px}
+.mini-activity-item{display:flex;gap:10px;font-size:.8rem;align-items:flex-start}
+.mini-activity-item .act-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.mini-activity-item .act-text{color:var(--gray-800);line-height:1.4}
+.mini-activity-item .act-time{font-size:.7rem;color:var(--gray-600);white-space:nowrap}
+@media(max-width:768px){.browser-body{grid-template-columns:1fr}.dash-sidebar{display:none}.dash-kpis{grid-template-columns:repeat(2,1fr)}.dash-grid-lower{grid-template-columns:1fr}}
+
+/* ===== FUTURE EXPANSION ===== */
+.future-expand{background:var(--gray-100)}
+.expansion-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px}
+.expansion-card{background:var(--white);border-radius:var(--radius-lg);padding:32px;border:2px solid transparent;transition:all .3s;position:relative;overflow:hidden}
+.expansion-card:hover{border-color:var(--sf-blue);transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.expansion-card .exp-phase{position:absolute;top:16px;right:16px;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:4px 10px;border-radius:12px;background:var(--sf-light);color:var(--sf-blue)}
+.expansion-card .exp-icon{font-size:2.2rem;margin-bottom:16px}
+.expansion-card h3{font-size:1.05rem;margin-bottom:8px}
+.expansion-card p{font-size:.85rem;color:var(--gray-600);line-height:1.5;margin-bottom:16px}
+.expansion-card .exp-tag{display:inline-block;font-size:.7rem;font-weight:600;padding:4px 10px;border-radius:12px;background:var(--green-light);color:var(--green)}
+
+/* ===== ENHANCED TIMELINE ===== */
+.enhanced-roadmap{background:var(--white)}
+.vertical-timeline{position:relative;max-width:700px;margin:48px auto 0;padding-left:48px}
+.vertical-timeline::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--sf-blue),var(--green),var(--orange))}
+.vt-step{position:relative;padding-bottom:40px}
+.vt-step:last-child{padding-bottom:0}
+.vt-marker{position:absolute;left:-36px;width:28px;height:28px;border-radius:50%;background:var(--sf-blue);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.7rem;font-weight:700;box-shadow:0 2px 8px rgba(1,118,211,.3);z-index:1}
+.vt-step:nth-child(2) .vt-marker{background:var(--green)}
+.vt-step:nth-child(3) .vt-marker{background:var(--sf-blue)}
+.vt-step:nth-child(4) .vt-marker{background:var(--green)}
+.vt-step:nth-child(5) .vt-marker{background:var(--orange)}
+.vt-content{background:var(--white);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);border:1px solid var(--gray-200);margin-left:8px}
+.vt-content h3{font-size:1rem;margin-bottom:4px}
+.vt-content .vt-date{font-size:.75rem;color:var(--sf-blue);font-weight:600;margin-bottom:8px}
+.vt-content p{font-size:.85rem;color:var(--gray-600);line-height:1.5;margin-bottom:10px}
+.vt-pills{display:flex;flex-wrap:wrap;gap:6px}
+.vt-pill{font-size:.7rem;font-weight:600;padding:4px 10px;border-radius:12px;background:var(--sf-light);color:var(--sf-dark)}
+.vt-pill.done{background:var(--green-light);color:var(--green)}
+.vt-pill.in-progress{background:#fff3e0;color:#e65100}
+
+/* ===== QUOTE / TESTIMONIAL ===== */
+.testimonial-section{background:linear-gradient(135deg,var(--sf-dark),#0b3d91);color:#fff;position:relative;overflow:hidden}
+.testimonial-section::before{content:'❝';position:absolute;top:40px;left:40px;font-size:8rem;opacity:.05;line-height:1}
+.testimonial-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px}
+.testimonial-card{background:rgba(255,255,255,.08);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius-lg);padding:32px}
+.testimonial-card blockquote{font-size:1rem;line-height:1.6;font-style:italic;margin-bottom:16px;opacity:.9}
+.testimonial-card .attribution{display:flex;align-items:center;gap:12px}
+.testimonial-card .attr-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:700;color:#fff;background:rgba(255,255,255,.15)}
+.testimonial-card .attr-name{font-weight:700;font-size:.9rem}
+.testimonial-card .attr-role{font-size:.75rem;opacity:.6}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+<div class="container">
+  <div class="nav-brand">
+    <!-- Salesforce Logo -->
+    <svg class="brand-logo" viewBox="0 0 127 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M41.5 7.5c5.2-5.4 12.5-8.7 20.4-8.7 10.5 0 19.7 5.7 24.6 14.2 4-1.7 8.4-2.7 13-2.7C114.8 10.3 127 22.5 127 37.8s-12.2 27.5-27.5 27.5c-2.7 0-5.3-.4-7.8-1.1-4.4 7.5-12.5 12.5-21.8 12.5-5.1 0-9.8-1.5-13.8-4.1-4.4 6.2-11.6 10.2-19.8 10.2-9.7 0-18.1-5.7-21.9-14C6.7 68.1 0 60.8 0 51.9c0-6.6 3.2-12.4 8.1-16-1.3-3.2-2-6.8-2-10.5C6.1 11.4 17.5 0 31.5 0c4.1 0 7.3 1 10 2.7" fill="#00A1E0"/>
+      <text x="63" y="46" text-anchor="middle" font-family="Segoe UI,system-ui,sans-serif" font-size="22" font-weight="700" fill="#fff">Salesforce</text>
+    </svg>
+    <div class="brand-divider"></div>
+    <!-- PI AgSciences Brand -->
+    <div class="brand-pi">
+      <img class="pi-logo" src="https://www.piindustries.com/wp-content/uploads/2026/01/PI-logo-RGB-scaled-1.png" alt="PI Industries">
+      PI AgSciences
+    </div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#hero">Overview</a></li>
+    <li><a href="#challenges">Challenges</a></li>
+    <li><a href="#products">Solution</a></li>
+    <li><a href="#sprout">Sprout Social</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#demo">Demo</a></li>
+    <li><a href="#lightning-dash">Dashboard</a></li>
+    <li><a href="#roi">ROI</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#cta">Next Steps</a></li>
+  </ul>
+</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+<div class="container">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <svg width="16" height="12" viewBox="0 0 127 70" fill="none"><path d="M41.5 7.5c5.2-5.4 12.5-8.7 20.4-8.7 10.5 0 19.7 5.7 24.6 14.2 4-1.7 8.4-2.7 13-2.7C114.8 10.3 127 22.5 127 37.8s-12.2 27.5-27.5 27.5c-2.7 0-5.3-.4-7.8-1.1-4.4 7.5-12.5 12.5-21.8 12.5-5.1 0-9.8-1.5-13.8-4.1-4.4 6.2-11.6 10.2-19.8 10.2-9.7 0-18.1-5.7-21.9-14C6.7 68.1 0 60.8 0 51.9c0-6.6 3.2-12.4 8.1-16-1.3-3.2-2-6.8-2-10.5C6.1 11.4 17.5 0 31.5 0c4.1 0 7.3 1 10 2.7" fill="#fff"/></svg>
+      Prepared for PI AgSciences | September 2026
+    </div>
+    <h1>Transform Your Ag Sales & Marketing with Salesforce</h1>
+    <p>A unified CRM platform to replace spreadsheets, empower your 23+ reps, and give PI AgSciences the scalable foundation to compete — and win — against HubSpot-powered competitors.</p>
+    <div class="hero-actions">
+      <a href="#products" class="btn btn-primary shimmer">Explore the Solution →</a>
+      <a href="#roi" class="btn btn-outline">See Your ROI</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-card fade-in">
+      <div class="stat-value counter" data-target="30" data-suffix="%" style="font-variant-numeric:tabular-nums">0%</div>
+      <div class="stat-label">Higher Sales Revenue</div>
+    </div>
+    <div class="stat-card fade-in">
+      <div class="stat-value counter" data-target="32" data-suffix="%" style="font-variant-numeric:tabular-nums">0%</div>
+      <div class="stat-label">Better Productivity</div>
+    </div>
+    <div class="stat-card fade-in">
+      <div class="stat-value counter" data-target="33" data-suffix="%" style="font-variant-numeric:tabular-nums">0%</div>
+      <div class="stat-label">Faster Decisions</div>
+    </div>
+    <div class="stat-card fade-in">
+      <div class="stat-value counter" data-target="40" data-prefix="$" data-suffix="K+" style="font-variant-numeric:tabular-nums">$0K+</div>
+      <div class="stat-label">Annual Savings</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- CHALLENGES / FLIP CARDS -->
+<section class="challenges" id="challenges">
+<div class="container text-center">
+  <span class="section-label">The Challenge</span>
+  <h2>Where PI AgSciences Is Losing Ground Today</h2>
+  <p class="section-subtitle">Click each card to see how Salesforce solves it.</p>
+  <div class="grid grid-4">
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="flip-icon">📊</div>
+          <h3>Spreadsheet Chaos</h3>
+          <p>23+ reps managing 100+ dealers in disconnected Excel sheets with no single source of truth.</p>
+          <span class="flip-hint">Click to flip →</span>
+        </div>
+        <div class="flip-card-back">
+          <div class="flip-icon">☁️</div>
+          <h3>Sales Cloud CRM</h3>
+          <p>One connected platform — every dealer, every rep, every interaction in one place with real-time visibility.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="flip-icon">📱</div>
+          <h3>Field Rep Adoption</h3>
+          <p>Past corporate tools were too cumbersome. Reps resist new systems that slow them down in the field.</p>
+          <span class="flip-hint">Click to flip →</span>
+        </div>
+        <div class="flip-card-back">
+          <div class="flip-icon">🤖</div>
+          <h3>Mobile-First + AI</h3>
+          <p>CarPlay voice logging, Agentforce AI coaching, and one-tap workflows built for reps on the road.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="flip-icon">🌐</div>
+          <h3>No Marketing Engine</h3>
+          <p>US division in "crawl phase" — no email lists, no lead scoring, no campaign tracking across channels.</p>
+          <span class="flip-hint">Click to flip →</span>
+        </div>
+        <div class="flip-card-back">
+          <div class="flip-icon">📣</div>
+          <h3>Marketing Cloud Growth</h3>
+          <p>AI-powered campaigns, multi-channel journeys, lead scoring, and geographic lead routing to retail partners.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="flip-icon">🔌</div>
+          <h3>Disconnected Systems</h3>
+          <p>SAP invoicing, manual quoting, no pipeline visibility — leadership decisions based on gut feel.</p>
+          <span class="flip-hint">Click to flip →</span>
+        </div>
+        <div class="flip-card-back">
+          <div class="flip-icon">⚡</div>
+          <h3>Connected Operations</h3>
+          <p>SAP/ERP integration, automated quoting with volume discounts, and real-time executive dashboards.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products" id="products">
+<div class="container text-center">
+  <span class="section-label">The Solution</span>
+  <h2>Your Salesforce Investment</h2>
+  <p class="section-subtitle">Three products, one platform. Click any card to explore features.</p>
+  <div class="grid grid-3">
+
+    <div class="product-card" onclick="this.classList.toggle('expanded')">
+      <div class="product-header">
+        <div class="product-icon sales">☁️</div>
+        <div class="product-info">
+          <h3>Sales Cloud Core</h3>
+          <div class="price">$29,601<span style="font-size:.7rem;font-weight:400">/yr</span></div>
+          <div class="price-detail">23 users × $107.25/mo (45% off list)</div>
+        </div>
+      </div>
+      <div class="product-features">
+        <span class="tag">Account 360</span>
+        <span class="tag">Mobile CRM</span>
+        <span class="tag">Opportunity Mgmt</span>
+        <span class="tag">Dashboards</span>
+        <span class="tag">Outlook Sync</span>
+      </div>
+      <div class="expand-hint">↓ Click for full feature list</div>
+      <div class="product-details">
+        <ul>
+          <li>Complete Account & Contact Management</li>
+          <li>Opportunity & Pipeline Tracking</li>
+          <li>Customizable Dashboards & Reports</li>
+          <li>Mobile App with CarPlay Support</li>
+          <li>Screen Flows for Field Visits</li>
+          <li>Lead Capture & Assignment Rules</li>
+          <li>Quote Generation & Approval</li>
+          <li>Volume Discounts & Rebate Mgmt</li>
+          <li>SAP/ERP Integration Ready</li>
+          <li>Outlook Calendar & Email Sync</li>
+          <li>Opportunity Scoring (AI)</li>
+          <li>Configurable Sales Processes</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="product-card" onclick="this.classList.toggle('expanded')">
+      <div class="product-header">
+        <div class="product-icon marketing">📣</div>
+        <div class="product-info">
+          <h3>Marketing Cloud Growth</h3>
+          <div class="price">$15,660<span style="font-size:.7rem;font-weight:400">/yr</span></div>
+          <div class="price-detail">MCG Edition (13% off list)</div>
+        </div>
+      </div>
+      <div class="product-features">
+        <span class="tag">AI Campaigns</span>
+        <span class="tag">Lead Scoring</span>
+        <span class="tag">Multi-Channel</span>
+        <span class="tag">Forms</span>
+        <span class="tag">Web Tracking</span>
+      </div>
+      <div class="expand-hint">↓ Click for full feature list</div>
+      <div class="product-details">
+        <ul>
+          <li>Agentforce Campaigns (AI-built)</li>
+          <li>AI Segment Creation</li>
+          <li>AI Email & SMS Content</li>
+          <li>Forms & Landing Pages</li>
+          <li>Lead Scoring & Grading</li>
+          <li>Multi-Channel Journeys</li>
+          <li>Web Activity Tracking</li>
+          <li>Geographic Lead Routing</li>
+          <li>LinkedIn/Facebook/Google Ads</li>
+          <li>Retail Partner Lead Matching</li>
+          <li>Campaign ROI Reporting</li>
+          <li>Marketing + Sales Alignment</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="product-card" onclick="this.classList.toggle('expanded')">
+      <div class="product-header">
+        <div class="product-icon agent">🤖</div>
+        <div class="product-info">
+          <h3>Agentforce for Sales</h3>
+          <div class="price">$20,700<span style="font-size:.7rem;font-weight:400">/yr</span></div>
+          <div class="price-detail">AI Sales Agents (40% off list)</div>
+        </div>
+      </div>
+      <div class="product-features">
+        <span class="tag">Pipeline AI</span>
+        <span class="tag">Sales Coach</span>
+        <span class="tag">Auto-Research</span>
+        <span class="tag">Prospecting</span>
+        <span class="tag">Quoting AI</span>
+      </div>
+      <div class="expand-hint">↓ Click for full feature list</div>
+      <div class="product-details">
+        <ul>
+          <li>Pipeline Management Agent</li>
+          <li>Sales Coaching Agent</li>
+          <li>Account Research Agent</li>
+          <li>Conversation Intelligence</li>
+          <li>Prospecting Agent</li>
+          <li>Engagement Agent</li>
+          <li>Quoting Agent</li>
+          <li>CarPlay Voice Assistant</li>
+          <li>Smart Follow-Up Suggestions</li>
+          <li>Deal Risk Alerts</li>
+          <li>Competitive Insights</li>
+          <li>Natural Language Queries</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<!-- SPROUT SOCIAL - MARKETING PARTNER -->
+<section class="sprout-social" id="sprout">
+<div class="container">
+  <div class="sprout-hero-grid">
+    <div>
+      <span class="section-label" style="color:rgba(255,255,255,.6)">Marketing Requirement</span>
+      <h2 style="color:#fff;font-size:clamp(1.5rem,3.5vw,2.2rem)">Sprout Social + Salesforce</h2>
+      <p style="opacity:.85;font-size:1.05rem;max-width:540px;margin-bottom:8px">Turn social media into a revenue engine. Sprout Social is Salesforce's premier social management partner, connecting social engagement directly to your CRM for a complete customer view.</p>
+      <p style="opacity:.7;font-size:.9rem;max-width:540px">"By seamlessly integrating social conversations to Salesforce, Sprout Social enables businesses to unify social data with their customer data to deliver better, more personalized service."</p>
+      <p style="font-size:.8rem;opacity:.5;margin-top:4px">- Kishan Chetan, EVP & GM, Salesforce Service Cloud</p>
+      <div class="sprout-stats">
+        <div class="sprout-stat"><div class="stat-num">32K+</div><div class="stat-desc">Customers in 100+ Countries</div></div>
+        <div class="sprout-stat"><div class="stat-num">#1</div><div class="stat-desc">G2 Product Ranking 2024</div></div>
+        <div class="sprout-stat"><div class="stat-num">96%</div><div class="stat-desc">Customer Satisfaction (CSAT)</div></div>
+        <div class="sprout-stat"><div class="stat-num">600M+</div><div class="stat-desc">Messages Processed Daily</div></div>
+      </div>
+    </div>
+    <div>
+      <h3 style="font-size:1.1rem;margin-bottom:16px;opacity:.9">Core Products</h3>
+      <div class="sprout-products">
+        <div class="sprout-product"><div class="sp-icon">📅</div><h4>Publishing</h4><p>Schedule & publish across all social channels</p></div>
+        <div class="sprout-product"><div class="sp-icon">💬</div><h4>Engagement</h4><p>Unified inbox for all social conversations</p></div>
+        <div class="sprout-product"><div class="sp-icon">📊</div><h4>Analytics</h4><p>Performance reporting & competitive benchmarks</p></div>
+        <div class="sprout-product"><div class="sp-icon">👂</div><h4>Listening</h4><p>Brand monitoring & sentiment analysis</p></div>
+        <div class="sprout-product"><div class="sp-icon">🗣️</div><h4>Advocacy</h4><p>Employee advocacy & brand amplification</p></div>
+        <div class="sprout-product"><div class="sp-icon">⭐</div><h4>Influencer</h4><p>Influencer discovery & campaign management</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:64px">
+    <h3 style="font-size:1.3rem;margin-bottom:8px">Salesforce Integrations</h3>
+    <p style="opacity:.7;font-size:.9rem;max-width:500px;margin:0 auto 24px">Sprout connects across the entire Salesforce platform, enriching every cloud with social intelligence.</p>
+  </div>
+  <div class="sprout-integrations">
+    <div class="sprout-integration fade-in">
+      <div class="int-icon" style="background:#e8f4fd;color:#0176d3">🎧</div>
+      <div><h4>Service Cloud</h4><p>Omni-channel social care with automated case routing. Transform social inquiries into support cases instantly.</p></div>
+    </div>
+    <div class="sprout-integration fade-in">
+      <div class="int-icon" style="background:#e8f4fd;color:#0176d3">☁️</div>
+      <div><h4>Sales Cloud</h4><p>Generate leads directly from social interactions. Social signals enrich prospect profiles for smarter outreach.</p></div>
+    </div>
+    <div class="sprout-integration fade-in">
+      <div class="int-icon" style="background:#fff3e0;color:#e65100">📣</div>
+      <div><h4>Marketing Cloud</h4><p>Build personalized journeys triggered by social engagement. Social data powers smarter segmentation.</p></div>
+    </div>
+    <div class="sprout-integration fade-in">
+      <div class="int-icon" style="background:#e8f5e9;color:#2e7d32">📊</div>
+      <div><h4>Data Cloud</h4><p>Enrich customer 360 profiles with social data. Unify social interactions with CRM records for complete context.</p></div>
+    </div>
+    <div class="sprout-integration fade-in">
+      <div class="int-icon" style="background:#f3e5f5;color:#7b1fa2">🤖</div>
+      <div><h4>Agentforce</h4><p>AI agents for social response, trend detection, content creation, and product feedback analysis.</p></div>
+    </div>
+    <div class="sprout-integration fade-in">
+      <div class="int-icon" style="background:#e3f5e8;color:#2e844a">💬</div>
+      <div><h4>Slack</h4><p>Streamlined social approvals and workflows. Get notified and collaborate on social content without leaving Slack.</p></div>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:48px">
+    <h3 style="font-size:1.1rem;margin-bottom:4px">Proven ROI (Forrester Research)</h3>
+    <p style="opacity:.6;font-size:.8rem;margin-bottom:16px">Total Economic Impact study, 3-year analysis</p>
+  </div>
+  <div class="sprout-roi-bar">
+    <div class="sprout-roi-item"><div class="roi-num">233%</div><div class="roi-desc">ROI over 3 Years</div></div>
+    <div class="sprout-roi-item"><div class="roi-num">92%</div><div class="roi-desc">Care Efficiency Improvement</div></div>
+    <div class="sprout-roi-item"><div class="roi-num">55%</div><div class="roi-desc">Productivity Increase (Yr 3)</div></div>
+    <div class="sprout-roi-item"><div class="roi-num">$142K</div><div class="roi-desc">Business Savings (3 Yr)</div></div>
+    <div class="sprout-roi-item"><div class="roi-num">2 hrs</div><div class="roi-desc">Saved per Person per Week</div></div>
+  </div>
+
+  <div style="text-align:center;margin-top:40px">
+    <p style="font-size:.85rem;opacity:.6;max-width:600px;margin:0 auto">Case studies: McDonald's reduced care costs 56% across 92M+ followers. Disney Streaming onboarded 400 agents in Service Cloud with Sprout replacing Social Studio.</p>
+  </div>
+</div>
+</section>
+
+<!-- DEMO VIDEO -->
+<section id="demo-video" style="padding:80px 0;background:var(--white)">
+<div class="container text-center">
+  <div class="section-label">See It In Action</div>
+  <h2>PI AgSciences + Salesforce Demo</h2>
+  <p class="section-subtitle">Watch our tailored walkthrough of how Sales Cloud, Marketing Cloud Growth, and Agentforce come together for your team.</p>
+  <div class="fade-in" style="max-width:960px;margin:0 auto;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-lg);background:#000;position:relative">
+    <div style="background:linear-gradient(135deg,var(--sf-dark),#0b3d91);padding:10px 20px;display:flex;align-items:center;gap:10px">
+      <div style="display:flex;gap:6px">
+        <span style="width:12px;height:12px;border-radius:50%;background:#ff5f57"></span>
+        <span style="width:12px;height:12px;border-radius:50%;background:#febc2e"></span>
+        <span style="width:12px;height:12px;border-radius:50%;background:#28c840"></span>
+      </div>
+      <div style="flex:1;text-align:center;font-size:.75rem;color:rgba(255,255,255,.6);font-weight:500">PI AgSciences — Demo &amp; Investment Review</div>
+    </div>
+    <iframe src="https://drive.google.com/file/d/18wQj6PVVYASdTujKyTuPSPim2Knev-Lr/preview" width="100%" height="540" style="border:none;display:block" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
+  <p style="margin-top:20px;font-size:.85rem;color:var(--gray-600)">📅 Recorded September 4, 2026 — Demo &amp; Investment Review Session</p>
+</div>
+</section>
+
+<!-- AI ARCHITECTURE STACK -->
+<section class="ai-stack section" id="architecture">
+<div class="container">
+  <div style="text-align:center;margin-bottom:40px">
+    <div class="badge">Platform Architecture</div>
+    <h2 style="font-size:2rem;margin:12px 0 8px">The Salesforce AI Stack — Built for PI AgSciences</h2>
+    <p style="color:var(--gray-600);max-width:640px;margin:auto">Five connected layers working together — from your SAP data foundation to AI-powered field intelligence. Click each layer to explore.</p>
+  </div>
+  <div class="stack-layout">
+    <div class="stack-layers" id="stackLayers">
+      <div class="stack-layer active" data-layer="0" onclick="setStackLayer(0)">
+        <div class="layer-icon" style="background:#e8f4fd;color:#0176d3">☁️</div>
+        <div><div class="layer-name">Sales Cloud</div><div class="layer-sub">CRM & Pipeline Management</div></div>
+      </div>
+      <div class="stack-layer" data-layer="1" onclick="setStackLayer(1)">
+        <div class="layer-icon" style="background:#fce4ec;color:#e91e63">🤖</div>
+        <div><div class="layer-name">Agentforce</div><div class="layer-sub">AI Sales Agents</div></div>
+      </div>
+      <div class="stack-layer" data-layer="2" onclick="setStackLayer(2)">
+        <div class="layer-icon" style="background:#fff3e0;color:#e65100">🛡️</div>
+        <div><div class="layer-name">Einstein Trust Layer</div><div class="layer-sub">Secure AI Foundation</div></div>
+      </div>
+      <div class="stack-layer" data-layer="3" onclick="setStackLayer(3)">
+        <div class="layer-icon" style="background:#e8f5e9;color:#2e7d32">📊</div>
+        <div><div class="layer-name">Data Cloud</div><div class="layer-sub">Unified Customer Data</div></div>
+      </div>
+      <div class="stack-layer" data-layer="4" onclick="setStackLayer(4)">
+        <div class="layer-icon" style="background:#f3e5f5;color:#7b1fa2">📧</div>
+        <div><div class="layer-name">Marketing Cloud Growth</div><div class="layer-sub">Campaigns & Engagement</div></div>
+      </div>
+    </div>
+    <div class="stack-detail" id="stackDetail">
+      <h3 id="stackTitle">Sales Cloud — Your CRM Command Center</h3>
+      <p class="detail-desc" id="stackDesc">23+ reps managing dealer relationships, field visits, and pipeline — all from a single platform that syncs with SAP in real time.</p>
+      <ul class="stack-detail-features" id="stackFeatures">
+        <li>Account & Contact Management</li>
+        <li>Opportunity Pipeline Tracking</li>
+        <li>Quote Generation & Approvals</li>
+        <li>SAP ERP Integration</li>
+        <li>Mobile Field Access (CarPlay)</li>
+        <li>Territory & Dealer Mapping</li>
+        <li>Reporting & Dashboards</li>
+        <li>Collaborative Forecasting</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- CONNECTED OPERATIONS -->
+<section class="connected-ops section" id="connected">
+<div class="container">
+  <div style="text-align:center;margin-bottom:8px">
+    <div class="badge">System Integration</div>
+    <h2 style="font-size:2rem;margin:12px 0 8px">From Disconnected Tools → Connected Operations</h2>
+    <p style="color:var(--gray-600);max-width:600px;margin:auto">Today's scattered systems become one unified platform. Every tool, every data point, one source of truth.</p>
+  </div>
+  <div class="ops-diagram">
+    <div class="ops-before">
+      <div class="ops-tool"><div class="tool-icon" style="background:#fff3e0">📊</div>Excel Spreadsheets</div>
+      <div class="ops-tool"><div class="tool-icon" style="background:#fff3e0">📧</div>Outlook Inboxes</div>
+      <div class="ops-tool"><div class="tool-icon" style="background:#fff3e0">🏭</div>SAP (Siloed)</div>
+      <div class="ops-tool"><div class="tool-icon" style="background:#fff3e0">📝</div>Paper Visit Logs</div>
+      <div class="ops-tool"><div class="tool-icon" style="background:#fff3e0">📞</div>Manual Call Notes</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:16px">
+      <div class="ops-hub">
+        <div class="hub-icon">☁️</div>
+        <div class="hub-label">Salesforce</div>
+      </div>
+      <div class="ai-thinking"><span>🤖</span> Agentforce <span class="dots"><span></span><span></span><span></span></span></div>
+    </div>
+    <div class="ops-after">
+      <div class="ops-tool"><div class="tool-icon" style="background:#e8f4fd">📈</div>Live Pipeline Dashboards</div>
+      <div class="ops-tool"><div class="tool-icon" style="background:#e8f4fd">🤖</div>AI-Generated Follow-Ups</div>
+      <div class="ops-tool"><div class="tool-icon" style="background:#e8f4fd">🔄</div>SAP ↔ CRM Sync</div>
+      <div class="ops-tool"><div class="tool-icon" style="background:#e8f4fd">📱</div>Mobile Field Intelligence</div>
+      <div class="ops-tool"><div class="tool-icon" style="background:#e8f4fd">🎯</div>Automated Campaigns</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- PHONE DEMO -->
+<section class="phone-demo" id="demo">
+<div class="container">
+  <div style="text-align:center;margin-bottom:48px">
+    <span class="section-label" style="color:rgba(255,255,255,.6)">Interactive Demo</span>
+    <h2>A Day in the Life of a PI AgSciences Rep</h2>
+    <p style="opacity:.7;max-width:500px;margin:0 auto">See how Salesforce transforms daily workflows — from the truck to the dealer meeting.</p>
+  </div>
+  <div class="phone-demo-layout">
+    <div class="demo-steps">
+      <div class="demo-step active" data-step="0" onclick="setDemoStep(0)">
+        <div class="step-num">STEP 01</div>
+        <h4>🚗 Morning Route — CarPlay Briefing</h4>
+        <p>Agentforce reads your daily agenda, top deals, and prep notes through CarPlay while you drive.</p>
+      </div>
+      <div class="demo-step" data-step="1" onclick="setDemoStep(1)">
+        <div class="step-num">STEP 02</div>
+        <h4>📍 Dealer Visit — Mobile Check-In</h4>
+        <p>One-tap site visit logging with screen flows — capture notes, photos, and next steps on the spot.</p>
+      </div>
+      <div class="demo-step" data-step="2" onclick="setDemoStep(2)">
+        <div class="step-num">STEP 03</div>
+        <h4>💰 Quote on the Fly</h4>
+        <p>Generate a quote with volume discounts and rebate tiers right from your phone — no laptop needed.</p>
+      </div>
+      <div class="demo-step" data-step="3" onclick="setDemoStep(3)">
+        <div class="step-num">STEP 04</div>
+        <h4>📊 Account 360 View</h4>
+        <p>See the full picture — order history, open opportunities, SAP invoices, and recent marketing touches.</p>
+      </div>
+      <div class="demo-step" data-step="4" onclick="setDemoStep(4)">
+        <div class="step-num">STEP 05</div>
+        <h4>🤖 AI Deal Coaching</h4>
+        <p>Agentforce flags at-risk deals, suggests next steps, and scores opportunities by likelihood to close.</p>
+      </div>
+      <div class="demo-step" data-step="5" onclick="setDemoStep(5)">
+        <div class="step-num">STEP 06</div>
+        <h4>🎙 Voice-to-CRM Logging</h4>
+        <p>Dictate meeting notes while driving — AI transcribes, extracts action items, and updates the record.</p>
+      </div>
+      <div class="demo-step" data-step="6" onclick="setDemoStep(6)">
+        <div class="step-num">STEP 07</div>
+        <h4>✉️ AI Follow-Up Email</h4>
+        <p>Agentforce drafts a personalized follow-up referencing your meeting notes — review and send in one tap.</p>
+      </div>
+      <div class="demo-step" data-step="7" onclick="setDemoStep(7)">
+        <div class="step-num">STEP 08</div>
+        <h4>📋 End-of-Day Recap</h4>
+        <p>AI summarizes your day — visits logged, quotes sent, deals advanced — and tees up tomorrow's priorities.</p>
+      </div>
+    </div>
+    <div>
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="phone-status-bar">
+            <span>PI AgSciences CRM</span>
+            <span>9:41 AM</span>
+          </div>
+          <div class="phone-content" id="phoneContent">
+            <!-- Dynamic content via JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- BEFORE / AFTER -->
+<section class="before-after" id="beforeafter">
+<div class="container text-center">
+  <span class="section-label">The Transformation</span>
+  <h2>Before & After Salesforce</h2>
+  <p class="section-subtitle">Toggle to see the difference Salesforce makes across your operations.</p>
+  <div class="toggle-container">
+    <button class="toggle-btn active" onclick="toggleBA('before')">❌ Today (Without CRM)</button>
+    <button class="toggle-btn" onclick="toggleBA('after')">✅ With Salesforce</button>
+  </div>
+
+  <div class="comparison-panel active" id="panel-before">
+    <div class="comparison-grid">
+      <div class="comparison-item before"><h4>📊 Pipeline Visibility</h4><p>Wes manually compiles Excel sheets from 23+ reps. Pipeline reviews take days to prepare. No real-time forecast.</p></div>
+      <div class="comparison-item before"><h4>📱 Field Rep Workflow</h4><p>Reps log visits in notebooks or personal spreadsheets. Notes lost in email threads. No standardized process.</p></div>
+      <div class="comparison-item before"><h4>💰 Quoting Process</h4><p>Manual quote creation. No centralized discount approvals. Volume pricing calculated by hand with error risk.</p></div>
+      <div class="comparison-item before"><h4>📣 Marketing</h4><p>No email lists, no campaign tracking, no lead scoring. US division starting from zero. No way to measure ROI.</p></div>
+      <div class="comparison-item before"><h4>🔗 System Integration</h4><p>SAP invoicing completely disconnected from sales. No order history visibility. Duplicate data entry everywhere.</p></div>
+      <div class="comparison-item before"><h4>📈 Decision Making</h4><p>Leadership decisions based on gut feel and outdated spreadsheet snapshots. No real-time data to act on.</p></div>
+    </div>
+  </div>
+
+  <div class="comparison-panel" id="panel-after">
+    <div class="comparison-grid">
+      <div class="comparison-item after"><h4>📊 Pipeline Visibility</h4><p>Real-time dashboards with AI-scored pipeline. Forecasts auto-update. Wes sees every deal, every stage, instantly.</p></div>
+      <div class="comparison-item after"><h4>📱 Field Rep Workflow</h4><p>Mobile-first CRM with CarPlay, one-tap check-ins, and screen flows. Reps love it because it saves time, not adds work.</p></div>
+      <div class="comparison-item after"><h4>💰 Quoting Process</h4><p>Automated quotes with built-in volume discounts, rebate tiers, and approval workflows. Generate from phone in seconds.</p></div>
+      <div class="comparison-item after"><h4>📣 Marketing</h4><p>AI-built campaigns across LinkedIn, Facebook, Google. Lead scoring routes prospects to the right dealer/rep by geography.</p></div>
+      <div class="comparison-item after"><h4>🔗 System Integration</h4><p>SAP connected. Full order history in Account 360. Invoicing stays in SAP until S4 HANA transition — no disruption.</p></div>
+      <div class="comparison-item after"><h4>📈 Decision Making</h4><p>33% faster decisions with real-time executive dashboards. Spot trends, coach reps, and forecast with confidence.</p></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- LIVE DASHBOARD -->
+<section class="dashboard" id="dashboard">
+<div class="container">
+  <div class="text-center" style="margin-bottom:36px">
+    <span class="section-label">Executive Dashboard</span>
+    <h2>What Leadership Sees Day One</h2>
+    <p class="section-subtitle">Live, real-time visibility into every metric that matters.</p>
+  </div>
+  <div class="dash-tabs">
+    <button class="dash-tab active" onclick="setDashTab('pipeline')">Deal Pipeline</button>
+    <button class="dash-tab" onclick="setDashTab('activity')">Rep Activity</button>
+    <button class="dash-tab" onclick="setDashTab('marketing')">Marketing</button>
+    <button class="dash-tab" onclick="setDashTab('forecast')">Forecast</button>
+  </div>
+
+  <!-- Pipeline -->
+  <div class="dash-panel active" id="dash-pipeline">
+    <div class="dash-metrics">
+      <div class="dash-metric"><div class="metric-value">$2.8M</div><div class="metric-label">Open Pipeline</div><div class="metric-change up">↑ 18% QoQ</div></div>
+      <div class="dash-metric"><div class="metric-value">47</div><div class="metric-label">Active Deals</div><div class="metric-change up">↑ 12 new</div></div>
+      <div class="dash-metric"><div class="metric-value">34%</div><div class="metric-label">Win Rate</div><div class="metric-change up">↑ 6 pts</div></div>
+      <div class="dash-metric"><div class="metric-value">28 days</div><div class="metric-label">Avg Sales Cycle</div><div class="metric-change up">↓ 8 days</div></div>
+    </div>
+    <div class="dash-chart">
+      <h4 style="margin-bottom:16px;font-size:.9rem">Pipeline by Stage</h4>
+      <div class="bar-chart">
+        <div class="bar-group"><div class="bar-value">$680K</div><div class="bar blue" style="height:45%"></div><div class="bar-label">Discovery</div></div>
+        <div class="bar-group"><div class="bar-value">$520K</div><div class="bar blue" style="height:35%"></div><div class="bar-label">Demo</div></div>
+        <div class="bar-group"><div class="bar-value">$890K</div><div class="bar blue" style="height:60%"></div><div class="bar-label">Proposal</div></div>
+        <div class="bar-group"><div class="bar-value">$440K</div><div class="bar blue" style="height:30%"></div><div class="bar-label">Negotiate</div></div>
+        <div class="bar-group"><div class="bar-value">$270K</div><div class="bar green" style="height:18%"></div><div class="bar-label">Closed Won</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activity -->
+  <div class="dash-panel" id="dash-activity">
+    <div class="dash-metrics">
+      <div class="dash-metric"><div class="metric-value">156</div><div class="metric-label">Site Visits / Mo</div><div class="metric-change up">↑ 24%</div></div>
+      <div class="dash-metric"><div class="metric-value">23</div><div class="metric-label">Active Reps</div><div class="metric-change up">100% adopted</div></div>
+      <div class="dash-metric"><div class="metric-value">8.2</div><div class="metric-label">Avg Visits / Rep</div><div class="metric-change up">↑ from 5.1</div></div>
+      <div class="dash-metric"><div class="metric-value">92%</div><div class="metric-label">Log Compliance</div><div class="metric-change up">↑ from 0%</div></div>
+    </div>
+    <div class="dash-chart">
+      <h4 style="margin-bottom:16px;font-size:.9rem">Weekly Rep Activity (Site Visits)</h4>
+      <div class="bar-chart">
+        <div class="bar-group"><div class="bar-value">32</div><div class="bar green" style="height:55%"></div><div class="bar-label">Mon</div></div>
+        <div class="bar-group"><div class="bar-value">41</div><div class="bar green" style="height:70%"></div><div class="bar-label">Tue</div></div>
+        <div class="bar-group"><div class="bar-value">38</div><div class="bar green" style="height:65%"></div><div class="bar-label">Wed</div></div>
+        <div class="bar-group"><div class="bar-value">45</div><div class="bar green" style="height:77%"></div><div class="bar-label">Thu</div></div>
+        <div class="bar-group"><div class="bar-value">28</div><div class="bar green" style="height:48%"></div><div class="bar-label">Fri</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Marketing -->
+  <div class="dash-panel" id="dash-marketing">
+    <div class="dash-metrics">
+      <div class="dash-metric"><div class="metric-value">12.4K</div><div class="metric-label">Reach / Month</div><div class="metric-change up">↑ from 0</div></div>
+      <div class="dash-metric"><div class="metric-value">847</div><div class="metric-label">Web Visitors</div><div class="metric-change up">↑ tracked</div></div>
+      <div class="dash-metric"><div class="metric-value">68</div><div class="metric-label">Leads Generated</div><div class="metric-change up">New capability</div></div>
+      <div class="dash-metric"><div class="metric-value">4.2%</div><div class="metric-label">Conversion Rate</div><div class="metric-change up">Industry avg: 2.8%</div></div>
+    </div>
+    <div class="dash-chart">
+      <h4 style="margin-bottom:16px;font-size:.9rem">Leads by Channel</h4>
+      <div class="bar-chart">
+        <div class="bar-group"><div class="bar-value">24</div><div class="bar orange" style="height:60%"></div><div class="bar-label">LinkedIn</div></div>
+        <div class="bar-group"><div class="bar-value">18</div><div class="bar orange" style="height:45%"></div><div class="bar-label">Google</div></div>
+        <div class="bar-group"><div class="bar-value">14</div><div class="bar orange" style="height:35%"></div><div class="bar-label">Facebook</div></div>
+        <div class="bar-group"><div class="bar-value">8</div><div class="bar orange" style="height:20%"></div><div class="bar-label">Instagram</div></div>
+        <div class="bar-group"><div class="bar-value">4</div><div class="bar orange" style="height:10%"></div><div class="bar-label">Organic</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Forecast -->
+  <div class="dash-panel" id="dash-forecast">
+    <div class="dash-metrics">
+      <div class="dash-metric"><div class="metric-value">$1.2M</div><div class="metric-label">Commit</div><div class="metric-change up">87% confidence</div></div>
+      <div class="dash-metric"><div class="metric-value">$1.8M</div><div class="metric-label">Best Case</div><div class="metric-change up">AI-scored</div></div>
+      <div class="dash-metric"><div class="metric-value">$980K</div><div class="metric-label">Closed YTD</div><div class="metric-change up">↑ 22%</div></div>
+      <div class="dash-metric"><div class="metric-value">78%</div><div class="metric-label">Quota Attain</div><div class="metric-change up">On track</div></div>
+    </div>
+    <div class="dash-chart">
+      <h4 style="margin-bottom:16px;font-size:.9rem">Monthly Revenue Forecast</h4>
+      <div class="bar-chart">
+        <div class="bar-group"><div class="bar-value">$180K</div><div class="bar blue" style="height:40%"></div><div class="bar-label">Jul</div></div>
+        <div class="bar-group"><div class="bar-value">$220K</div><div class="bar blue" style="height:49%"></div><div class="bar-label">Aug</div></div>
+        <div class="bar-group"><div class="bar-value">$310K</div><div class="bar blue" style="height:69%"></div><div class="bar-label">Sep</div></div>
+        <div class="bar-group"><div class="bar-value">$260K</div><div class="bar blue" style="height:58%"></div><div class="bar-label">Oct</div></div>
+        <div class="bar-group"><div class="bar-value">$350K</div><div class="bar green" style="height:78%"></div><div class="bar-label">Nov</div></div>
+        <div class="bar-group"><div class="bar-value">$450K</div><div class="bar green" style="height:100%"></div><div class="bar-label">Dec</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- LIGHTNING DASHBOARD MOCK -->
+<section class="lightning-dash section" id="lightning-dash">
+<div class="container">
+  <div class="text-center" style="margin-bottom:40px">
+    <span class="section-label">Your Future CRM</span>
+    <h2>PI AgSciences — Live Dashboard Preview</h2>
+    <p class="section-sub">What your team will see every day in Salesforce.</p>
+  </div>
+  <div class="browser-frame fade-in">
+    <div class="browser-chrome">
+      <span class="chrome-dot" style="background:#ff5f57"></span>
+      <span class="chrome-dot" style="background:#ffbd2e"></span>
+      <span class="chrome-dot" style="background:#28c840"></span>
+      <span class="chrome-url">https://piagsciences.lightning.force.com/dashboards</span>
+    </div>
+    <div style="display:flex;min-height:420px">
+      <div class="dash-sidebar">
+        <div style="padding:12px;border-bottom:1px solid rgba(255,255,255,.1)">
+          <img src="https://www.piindustries.com/wp-content/uploads/2026/01/PI-logo-RGB-scaled-1.png" alt="PI" style="height:24px;filter:brightness(10)">
+        </div>
+        <div class="sidebar-item active" style="padding:10px 14px;font-size:.8rem;color:rgba(255,255,255,.9);background:rgba(255,255,255,.1);border-radius:6px;margin:8px 6px;cursor:pointer">📊 Dashboard</div>
+        <div class="sidebar-item" style="padding:10px 14px;font-size:.8rem;color:rgba(255,255,255,.5);margin:8px 6px;cursor:pointer">👤 Accounts</div>
+        <div class="sidebar-item" style="padding:10px 14px;font-size:.8rem;color:rgba(255,255,255,.5);margin:8px 6px;cursor:pointer">🤝 Opportunities</div>
+        <div class="sidebar-item" style="padding:10px 14px;font-size:.8rem;color:rgba(255,255,255,.5);margin:8px 6px;cursor:pointer">📧 Campaigns</div>
+        <div class="sidebar-item" style="padding:10px 14px;font-size:.8rem;color:rgba(255,255,255,.5);margin:8px 6px;cursor:pointer">🤖 Agentforce</div>
+        <div class="sidebar-item" style="padding:10px 14px;font-size:.8rem;color:rgba(255,255,255,.5);margin:8px 6px;cursor:pointer">📋 Reports</div>
+      </div>
+      <div class="dash-main">
+        <div class="dash-kpis">
+          <div class="kpi-card">
+            <div style="font-size:.7rem;color:var(--gray-600);text-transform:uppercase;letter-spacing:.5px">Pipeline Value</div>
+            <div class="counter" data-target="4200000" data-prefix="$" data-suffix="" data-format="millions" style="font-size:1.5rem;font-weight:700;color:var(--gray-800);font-variant-numeric:tabular-nums">$0</div>
+            <div style="font-size:.7rem;color:var(--green)">↑ 28% vs. last quarter</div>
+          </div>
+          <div class="kpi-card">
+            <div style="font-size:.7rem;color:var(--gray-600);text-transform:uppercase;letter-spacing:.5px">Win Rate</div>
+            <div class="counter" data-target="34" data-suffix="%" style="font-size:1.5rem;font-weight:700;color:var(--green);font-variant-numeric:tabular-nums">0%</div>
+            <div style="font-size:.7rem;color:var(--green)">↑ 12pts improvement</div>
+          </div>
+          <div class="kpi-card">
+            <div style="font-size:.7rem;color:var(--gray-600);text-transform:uppercase;letter-spacing:.5px">Avg Deal Cycle</div>
+            <div class="counter" data-target="42" data-suffix=" days" style="font-size:1.5rem;font-weight:700;color:var(--sf-blue);font-variant-numeric:tabular-nums">0 days</div>
+            <div style="font-size:.7rem;color:var(--green)">↓ 18 days faster</div>
+          </div>
+          <div class="kpi-card">
+            <div style="font-size:.7rem;color:var(--gray-600);text-transform:uppercase;letter-spacing:.5px">Active Campaigns</div>
+            <div class="counter" data-target="12" style="font-size:1.5rem;font-weight:700;color:#1a5cff;font-variant-numeric:tabular-nums">0</div>
+            <div style="font-size:.7rem;color:var(--gray-600)">MCG automated</div>
+          </div>
+        </div>
+        <div class="agent-banner">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:1.1rem">🤖</span>
+            <strong>Agentforce Insight:</strong>
+            <span>3 deals need follow-up today. Top priority: <em>Midwest Dealer Group</em> — decision expected this week.</span>
+          </div>
+          <span class="pulse-dot"></span>
+        </div>
+        <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:16px;margin-top:16px">
+          <div class="mini-pipeline">
+            <div style="font-weight:600;font-size:.85rem;margin-bottom:12px;color:var(--gray-800)">Pipeline by Stage</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div><div style="display:flex;justify-content:space-between;font-size:.75rem;margin-bottom:3px"><span>Prospecting</span><span>$820K</span></div><div style="background:var(--gray-200);border-radius:4px;height:8px"><div style="background:var(--sf-accent);height:100%;border-radius:4px;width:20%"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:.75rem;margin-bottom:3px"><span>Discovery</span><span>$1.1M</span></div><div style="background:var(--gray-200);border-radius:4px;height:8px"><div style="background:var(--sf-blue);height:100%;border-radius:4px;width:28%"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:.75rem;margin-bottom:3px"><span>Proposal</span><span>$1.4M</span></div><div style="background:var(--gray-200);border-radius:4px;height:8px"><div style="background:#1a5cff;height:100%;border-radius:4px;width:35%"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:.75rem;margin-bottom:3px"><span>Negotiation</span><span>$680K</span></div><div style="background:var(--gray-200);border-radius:4px;height:8px"><div style="background:var(--green);height:100%;border-radius:4px;width:17%"></div></div></div>
+            </div>
+          </div>
+          <div class="mini-activity-list">
+            <div style="font-weight:600;font-size:.85rem;margin-bottom:12px;color:var(--gray-800)">Recent Activity</div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;gap:8px;font-size:.75rem"><span style="color:var(--green)">●</span><div><strong>Deal Won</strong> — Southern Ag Supply ($45K)<br><span style="color:var(--gray-600)">2 hours ago</span></div></div>
+              <div style="display:flex;gap:8px;font-size:.75rem"><span style="color:var(--sf-blue)">●</span><div><strong>AI Email Sent</strong> — Follow-up to Delta Seeds<br><span style="color:var(--gray-600)">3 hours ago</span></div></div>
+              <div style="display:flex;gap:8px;font-size:.75rem"><span style="color:var(--orange)">●</span><div><strong>Meeting Logged</strong> — Crop Solutions Inc call<br><span style="color:var(--gray-600)">Yesterday</span></div></div>
+              <div style="display:flex;gap:8px;font-size:.75rem"><span style="color:#1a5cff">●</span><div><strong>Campaign Launched</strong> — Q4 Product Promo<br><span style="color:var(--gray-600)">Yesterday</span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ROI CALCULATOR -->
+<section class="roi-calc" id="roi">
+<div class="container">
+  <div class="text-center" style="margin-bottom:48px">
+    <span class="section-label">Value Calculator</span>
+    <h2>Your Return on Investment</h2>
+    <p class="section-subtitle">Adjust the sliders to model PI AgSciences' specific ROI scenario.</p>
+  </div>
+  <div class="calc-layout">
+    <div class="calc-inputs">
+      <div class="slider-group">
+        <label>Number of Sales Reps <span id="repCount">23</span></label>
+        <input type="range" min="10" max="50" value="23" id="sliderReps" oninput="calcROI()">
+      </div>
+      <div class="slider-group">
+        <label>Avg Revenue per Rep ($/yr) <span id="revPerRep">$420,000</span></label>
+        <input type="range" min="100000" max="1000000" value="420000" step="10000" id="sliderRev" oninput="calcROI()">
+      </div>
+      <div class="slider-group">
+        <label>Expected Productivity Gain <span id="prodGain">15%</span></label>
+        <input type="range" min="5" max="40" value="15" id="sliderProd" oninput="calcROI()">
+      </div>
+      <div class="slider-group">
+        <label>Hours Saved per Rep / Week <span id="hoursSaved">5</span></label>
+        <input type="range" min="1" max="15" value="5" id="sliderHours" oninput="calcROI()">
+      </div>
+      <div class="slider-group">
+        <label>Win Rate Improvement <span id="winImprove">8%</span></label>
+        <input type="range" min="2" max="20" value="8" id="sliderWin" oninput="calcROI()">
+      </div>
+    </div>
+    <div class="calc-results">
+      <h3>Projected Annual Impact</h3>
+      <div class="result-row">
+        <span class="result-label">Revenue Lift</span>
+        <span class="result-value" id="resultRevLift">$1,449,000</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Productivity Savings</span>
+        <span class="result-value" id="resultProdSave">$143,750</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Win Rate Impact</span>
+        <span class="result-value" id="resultWinImpact">$772,800</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Salesforce Investment</span>
+        <span class="result-value" id="resultInvestment">-$65,961</span>
+      </div>
+      <div class="result-highlight">
+        <div class="big-number" id="resultROI">36x</div>
+        <p>Return on Investment (Year 1)</p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonial-section section" id="testimonials">
+<div class="container">
+  <div class="text-center" style="margin-bottom:40px">
+    <div class="badge" style="background:rgba(255,255,255,.15);color:#fff">Social Proof</div>
+    <h2 style="font-size:2rem;color:#fff;margin:12px 0 8px">What Leaders in Ag Are Saying</h2>
+    <p style="color:rgba(255,255,255,.7);max-width:600px;margin:auto">Companies like PI AgSciences are transforming their sales operations with Salesforce.</p>
+  </div>
+  <div class="testimonial-grid">
+    <div class="testimonial-card fade-in">
+      <blockquote>"We went from spreadsheets to a full pipeline view in 60 days. Our reps actually use the CRM because it works on their phones between farm visits."</blockquote>
+      <div class="attribution">
+        <div class="testimonial-avatar" style="background:linear-gradient(135deg,#0176d3,#032d60)">VP</div>
+        <div><strong>VP of Sales</strong><br><span style="color:rgba(255,255,255,.6)">Specialty Ag Chemicals Company</span></div>
+      </div>
+    </div>
+    <div class="testimonial-card fade-in">
+      <blockquote>"Agentforce writes our call summaries and follow-up emails. That's 45 minutes a day back for each rep — time they're spending with dealers."</blockquote>
+      <div class="attribution">
+        <div class="testimonial-avatar" style="background:linear-gradient(135deg,#e91e63,#9c27b0)">SD</div>
+        <div><strong>Sales Director</strong><br><span style="color:rgba(255,255,255,.6)">Crop Protection Manufacturer</span></div>
+      </div>
+    </div>
+    <div class="testimonial-card fade-in">
+      <blockquote>"The SAP integration was the game-changer. Orders, inventory, pricing — all visible in the CRM. No more double-entry, no more guessing."</blockquote>
+      <div class="attribution">
+        <div class="testimonial-avatar" style="background:linear-gradient(135deg,#2e844a,#1a5c2e)">IT</div>
+        <div><strong>IT Director</strong><br><span style="color:rgba(255,255,255,.6)">Global Ag Inputs Provider</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- WHY NOW -->
+<section class="why-now" id="whynow">
+<div class="container">
+  <span class="section-label" style="color:rgba(255,255,255,.6)">Why Now</span>
+  <h2>The Window Is Open — Act Before It Closes</h2>
+  <div class="why-now-grid">
+    <div class="why-now-item">
+      <div class="icon">⏰</div>
+      <h4>Incentives Expire 9/30</h4>
+      <p>Current pricing with 45% Sales Cloud discount and 80 free implementation hours reserved through September 30, 2026.</p>
+    </div>
+    <div class="why-now-item">
+      <div class="icon">📈</div>
+      <h4>Selling Season Approaching</h4>
+      <p>Get your team live before peak season. A 90-day implementation means reps are productive by January 2027.</p>
+    </div>
+    <div class="why-now-item">
+      <div class="icon">🎯</div>
+      <h4>$40K+ in Annual Savings</h4>
+      <p>Full solution saves $40,359/yr vs. list price — including $20,000 in free implementation hours with SetGo.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ENHANCED ROADMAP -->
+<section class="enhanced-roadmap section" id="roadmap">
+<div class="container">
+  <div class="text-center" style="margin-bottom:40px">
+    <div class="badge">Implementation</div>
+    <h2 style="font-size:2rem;margin:12px 0 8px">Your 90-Day Path to Live</h2>
+    <p style="color:var(--gray-600);max-width:600px;margin:auto">SetGo's "Day One Basics" approach — get your reps productive fast, then optimize.</p>
+  </div>
+  <div class="vertical-timeline">
+    <div class="vt-step fade-in">
+      <div class="vt-marker"></div>
+      <div class="vt-content">
+        <h4>Week 1–2 · Discovery & Blueprint</h4>
+        <p>Kickoff workshops with Wes, Gary & Bridget. Map current sales processes, define SAP integration scope, and design the data migration plan.</p>
+        <div class="vt-pills">
+          <span>Discovery Workshops</span>
+          <span>SAP Integration Plan</span>
+          <span>Data Migration Scope</span>
+        </div>
+      </div>
+    </div>
+    <div class="vt-step fade-in">
+      <div class="vt-marker"></div>
+      <div class="vt-content">
+        <h4>Week 3–4 · Core CRM Build</h4>
+        <p>Configure accounts, contacts, opportunities, and quoting workflows. Set up user roles, permissions, and mobile-first screen flows for 23+ reps.</p>
+        <div class="vt-pills">
+          <span>CRM Configuration</span>
+          <span>User Roles</span>
+          <span>Mobile Flows</span>
+        </div>
+      </div>
+    </div>
+    <div class="vt-step fade-in">
+      <div class="vt-marker"></div>
+      <div class="vt-content">
+        <h4>Week 5–7 · AI & Marketing Setup</h4>
+        <p>Enable Agentforce AI agents, configure Marketing Cloud Growth campaigns, connect SAP data sync, and build executive dashboards.</p>
+        <div class="vt-pills">
+          <span>Agentforce Enabled</span>
+          <span>MCG Campaigns</span>
+          <span>SAP ↔ CRM Sync</span>
+          <span class="in-progress">In Progress</span>
+        </div>
+      </div>
+    </div>
+    <div class="vt-step fade-in">
+      <div class="vt-marker"></div>
+      <div class="vt-content">
+        <h4>Week 8–10 · Training & UAT</h4>
+        <p>Train power users and champion reps. Run user acceptance testing with real dealer data. Fine-tune AI agents and campaign workflows.</p>
+        <div class="vt-pills">
+          <span>Power User Training</span>
+          <span>UAT Testing</span>
+          <span>AI Fine-Tuning</span>
+        </div>
+      </div>
+    </div>
+    <div class="vt-step fade-in">
+      <div class="vt-marker"></div>
+      <div class="vt-content">
+        <h4>Week 11–12 · Go Live & Optimize</h4>
+        <p>Full launch with all 23+ reps. First marketing campaigns go live. Executive dashboards activated. 30-day post-launch support & optimization.</p>
+        <div class="vt-pills">
+          <span class="done">Go Live</span>
+          <span class="done">First Campaigns</span>
+          <span>Post-Launch Support</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- YOUR TEAM -->
+<section class="team" id="team">
+<div class="container text-center">
+  <span class="section-label">Your Team</span>
+  <h2>Key Stakeholders</h2>
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="team-avatar" style="background:linear-gradient(135deg,var(--sf-blue),var(--sf-dark))">WH</div>
+      <h4>Wes Hays</h4>
+      <div class="role">North America Commercial Lead</div>
+      <div class="contact">wes.hays@piind.com · (314) 399-5419</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:linear-gradient(135deg,var(--green),#1a5c2e)">GA</div>
+      <h4>Gary Anderson</h4>
+      <div class="role">IT Manager</div>
+      <div class="contact">gary.anderson@piind.com · (314) 914-1137</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:linear-gradient(135deg,var(--orange),#d97706)">BR</div>
+      <h4>Bridget Rupert</h4>
+      <div class="role">Global Marketing & Product Manager</div>
+      <div class="contact">bridget.rupert@piind.com · (314) 917-0541</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- FUTURE EXPANSION -->
+<section class="future-expand section" id="expansion">
+<div class="container">
+  <div class="text-center" style="margin-bottom:40px">
+    <div class="badge">Growth Potential</div>
+    <h2 style="font-size:2rem;margin:12px 0 8px">Where Salesforce Takes You Next</h2>
+    <p style="color:var(--gray-600);max-width:600px;margin:auto">Your CRM foundation unlocks an ecosystem of growth. Here's what Phase 2 could look like.</p>
+  </div>
+  <div class="expansion-grid">
+    <div class="expansion-card fade-in">
+      <span class="phase-pill">Phase 2</span>
+      <div class="expansion-icon">🎧</div>
+      <h4>Service Cloud</h4>
+      <p>Centralize dealer support cases, automate SLA tracking, and give reps a 360° view of every customer interaction.</p>
+      <span class="expansion-tag">Customer Retention</span>
+    </div>
+    <div class="expansion-card fade-in">
+      <span class="phase-pill">Phase 2</span>
+      <div class="expansion-icon">💰</div>
+      <h4>Revenue Cloud (CPQ)</h4>
+      <p>Replace manual quoting with guided selling, volume-based pricing, and approval workflows tied to SAP.</p>
+      <span class="expansion-tag">Revenue Operations</span>
+    </div>
+    <div class="expansion-card fade-in">
+      <span class="phase-pill">Phase 3</span>
+      <div class="expansion-icon">🚛</div>
+      <h4>Field Service</h4>
+      <p>Dispatch field reps intelligently, track field visits, and optimize coverage across territories.</p>
+      <span class="expansion-tag">Field Operations</span>
+    </div>
+    <div class="expansion-card fade-in">
+      <span class="phase-pill">Phase 3</span>
+      <div class="expansion-icon">📊</div>
+      <h4>Tableau Analytics</h4>
+      <p>Unlock deep business intelligence with embedded visualizations across sales, marketing, and supply chain data.</p>
+      <span class="expansion-tag">Advanced Analytics</span>
+    </div>
+    <div class="expansion-card fade-in">
+      <span class="phase-pill">Phase 2</span>
+      <div class="expansion-icon">💬</div>
+      <h4>Slack</h4>
+      <p>Bring CRM data directly into conversations — get deal alerts, collaborate in deal rooms, and align sales, marketing &amp; leadership in real time without switching apps.</p>
+      <ul style="text-align:left;font-size:.82rem;color:var(--gray-600);margin:10px 0 0;padding-left:18px;line-height:1.6">
+        <li>Deal-room channels with live Salesforce notifications</li>
+        <li>Instant pipeline alerts &amp; approval requests</li>
+        <li>Search &amp; update CRM records without leaving chat</li>
+        <li>Faster cross-team alignment on key accounts</li>
+      </ul>
+      <span class="expansion-tag">Team Collaboration</span>
+    </div>
+    <div class="expansion-card fade-in">
+      <span class="phase-pill">Phase 2</span>
+      <div class="expansion-icon">🔗</div>
+      <h4>MuleSoft</h4>
+      <p>Connect SAP ERP to Salesforce with pre-built APIs — sync inventory, orders, pricing &amp; customer data in real time so every rep works from one source of truth.</p>
+      <ul style="text-align:left;font-size:.82rem;color:var(--gray-600);margin:10px 0 0;padding-left:18px;line-height:1.6">
+        <li>Real-time SAP ↔ Salesforce data sync</li>
+        <li>Eliminate manual data entry between systems</li>
+        <li>Pre-built connectors for SAP ECC &amp; S/4HANA</li>
+        <li>API-led connectivity for any future integration</li>
+      </ul>
+      <span class="expansion-tag">SAP Integration</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- PRICING SUMMARY -->
+<section style="background:var(--white);padding:80px 0" id="pricing">
+<div class="container text-center">
+  <span class="section-label">Investment</span>
+  <h2>Recommended: Full Solution</h2>
+  <p class="section-subtitle">Everything PI AgSciences needs to compete and win — with maximum savings and AI-powered advantage.</p>
+  <div class="grid grid-3" style="margin-top:32px">
+    <div class="card" style="border:2px solid var(--gray-200)">
+      <span class="tag" style="background:var(--sf-light);color:var(--sf-dark);margin-bottom:16px">Option 1</span>
+      <h3>Core CRM Only</h3>
+      <div style="font-size:2rem;font-weight:800;color:var(--sf-dark);margin:12px 0">$35,522<span style="font-size:.9rem;font-weight:400">/yr</span></div>
+      <p style="font-size:.85rem;color:var(--gray-600);margin-bottom:16px">23 users × $128.70/mo (34% off)</p>
+      <ul style="list-style:none;text-align:left;font-size:.85rem">
+        <li style="padding:6px 0">✓ Sales Cloud Core Edition</li>
+        <li style="padding:6px 0">✓ 20 free implementation hours</li>
+        <li style="padding:6px 0;color:var(--green);font-weight:600">$18,298 annual savings</li>
+        <li style="padding:6px 0;color:var(--gray-600)">✗ No marketing automation</li>
+        <li style="padding:6px 0;color:var(--gray-600)">✗ No AI agents</li>
+      </ul>
+    </div>
+    <div class="card" style="border:2px solid var(--gray-200)">
+      <span class="tag" style="background:var(--orange-light);color:#d97706;margin-bottom:16px">Option 2</span>
+      <h3>CRM + Marketing</h3>
+      <div style="font-size:2rem;font-weight:800;color:var(--sf-dark);margin:12px 0">$49,390<span style="font-size:.9rem;font-weight:400">/yr</span></div>
+      <p style="font-size:.85rem;color:var(--gray-600);margin-bottom:16px">Sales Cloud (39% off) + MCG (8% off)</p>
+      <ul style="list-style:none;text-align:left;font-size:.85rem">
+        <li style="padding:6px 0">✓ Sales Cloud Core Edition</li>
+        <li style="padding:6px 0">✓ Marketing Cloud Growth</li>
+        <li style="padding:6px 0">✓ 60 free implementation hours</li>
+        <li style="padding:6px 0;color:var(--green);font-weight:600">$22,429 annual savings</li>
+        <li style="padding:6px 0;color:var(--gray-600)">✗ No AI agents</li>
+      </ul>
+    </div>
+    <div class="card" style="border:2px solid var(--sf-blue);box-shadow:0 8px 32px rgba(1,118,211,.15)">
+      <span class="tag" style="background:var(--sf-blue);color:#fff;margin-bottom:16px">Recommended</span>
+      <h3>Full Solution</h3>
+      <div style="font-size:2rem;font-weight:800;color:var(--sf-blue);margin:12px 0">$65,961<span style="font-size:.9rem;font-weight:400">/yr</span></div>
+      <p style="font-size:.85rem;color:var(--gray-600);margin-bottom:16px">SC (45% off) + MCG (13% off) + AF (40% off)</p>
+      <ul style="list-style:none;text-align:left;font-size:.85rem">
+        <li style="padding:6px 0">✓ Sales Cloud Core Edition</li>
+        <li style="padding:6px 0">✓ Marketing Cloud Growth</li>
+        <li style="padding:6px 0">✓ Agentforce for Sales (AI)</li>
+        <li style="padding:6px 0">✓ 80 free implementation hours</li>
+        <li style="padding:6px 0;color:var(--green);font-weight:700">$40,359 annual savings</li>
+      </ul>
+    </div>
+  </div>
+  <p style="font-size:.8rem;color:var(--gray-600);margin-top:24px">All options: 12-month term · Net 30 billed annually · Incentive pricing reserved through 9/30/2026</p>
+</div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+<div class="container">
+  <h2>Ready to Move Forward?</h2>
+  <p>Let's get PI AgSciences on the path to a modern, AI-powered sales and marketing engine. Your pricing is locked through September 30.</p>
+  <div class="cta-actions">
+    <a href="mailto:mhezbawi@salesforce.com?subject=PI%20AgSciences%20-%20Ready%20to%20Move%20Forward" class="btn btn-white shimmer">📧 Contact Hizzi</a>
+    <a href="#pricing" class="btn btn-outline">📋 Review Pricing</a>
+  </div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:10px">
+    <svg width="80" height="20" viewBox="0 0 127 70" fill="none"><path d="M41.5 7.5c5.2-5.4 12.5-8.7 20.4-8.7 10.5 0 19.7 5.7 24.6 14.2 4-1.7 8.4-2.7 13-2.7C114.8 10.3 127 22.5 127 37.8s-12.2 27.5-27.5 27.5c-2.7 0-5.3-.4-7.8-1.1-4.4 7.5-12.5 12.5-21.8 12.5-5.1 0-9.8-1.5-13.8-4.1-4.4 6.2-11.6 10.2-19.8 10.2-9.7 0-18.1-5.7-21.9-14C6.7 68.1 0 60.8 0 51.9c0-6.6 3.2-12.4 8.1-16-1.3-3.2-2-6.8-2-10.5C6.1 11.4 17.5 0 31.5 0c4.1 0 7.3 1 10 2.7" fill="rgba(255,255,255,.25)"/></svg>
+    <span style="width:1px;height:16px;background:rgba(255,255,255,.2);display:inline-block"></span>
+    <span style="font-weight:700;color:rgba(255,255,255,.6);letter-spacing:.02em"><img src="https://www.piindustries.com/wp-content/uploads/2026/01/PI-logo-RGB-scaled-1.png" alt="PI Industries" style="height:18px;width:auto;vertical-align:middle;margin-right:6px;filter:brightness(0) invert(1) opacity(.6)">PI AgSciences</span>
+  </div>
+  <p>Confidential — Prepared exclusively for PI AgSciences by Salesforce | September 2026</p>
+  <p style="margin-top:4px">Hizzi Hezbawi · Growth Business AE · mhezbawi@salesforce.com</p>
+</footer>
+
+<script>
+// === NAV SCROLL ===
+window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',window.scrollY>40)});
+
+// === FADE IN ON SCROLL ===
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.15});
+document.querySelectorAll('.fade-in,.stat-card,.card,.product-card,.phase,.team-card').forEach(el=>{el.classList.add('fade-in');obs.observe(el)});
+
+// === PHONE DEMO ===
+const phoneScreens=[
+{title:'🚗 Morning Briefing',html:`
+<h4>Good morning! Here's your day:</h4>
+<div class="mini-card"><div class="label">Today's Priority</div><div class="value">3 Dealer Visits Scheduled</div></div>
+<div class="mini-card"><div class="label">Top Deal Alert</div><div class="value">MidSouth Ag — $42K proposal due today</div></div>
+<div class="mini-card"><div class="label">AI Coaching Tip</div><div class="value">"Follow up on Southern Seed pricing request from Tuesday"</div></div>
+<div class="mini-metric"><span>Open Pipeline</span><span style="font-weight:700;color:#0176d3">$380K</span></div>
+<div class="mini-metric"><span>Deals Closing This Week</span><span style="font-weight:700;color:#2e844a">4</span></div>
+<button class="mini-btn">🎙 Start CarPlay Briefing</button>`},
+{title:'📍 Dealer Check-In',html:`
+<h4>📍 Site Visit: Farm & Field Supply</h4>
+<div class="mini-card"><div class="label">Dealer</div><div class="value">Farm & Field Supply, Inc.</div></div>
+<div class="mini-card"><div class="label">Last Visit</div><div class="value">14 days ago — discussed Q4 order</div></div>
+<div class="mini-card"><div class="label">Contact</div><div class="value">Mike Torres — Purchasing Manager</div></div>
+<div class="mini-metric"><span>YTD Orders</span><span style="font-weight:700">$128,400</span></div>
+<div class="mini-metric"><span>Open Quotes</span><span style="font-weight:700;color:#fe9339">2</span></div>
+<button class="mini-btn">✅ Log Visit & Notes</button>`},
+{title:'💰 Quick Quote',html:`
+<h4>💰 Generate Quote</h4>
+<div class="mini-card"><div class="label">Product</div><div class="value">ProGrow 360 Herbicide — 200 gal</div></div>
+<div class="mini-card"><div class="label">List Price</div><div class="value" style="text-decoration:line-through;color:#706e6b">$18,400</div></div>
+<div class="mini-card"><div class="label">Volume Discount (Tier 3)</div><div class="value" style="color:#2e844a">-12% → $16,192</div></div>
+<div class="mini-card"><div class="label">Rebate Applied</div><div class="value" style="color:#2e844a">-$500 loyalty</div></div>
+<div class="mini-metric"><span style="font-weight:700">Total</span><span style="font-weight:800;color:#0176d3;font-size:1.1rem">$15,692</span></div>
+<button class="mini-btn">📤 Send Quote to Dealer</button>`},
+{title:'📊 Account 360',html:`
+<h4>📊 Farm & Field Supply — 360 View</h4>
+<div class="mini-metric"><span>Annual Revenue</span><span style="font-weight:700">$412K</span></div>
+<div class="mini-metric"><span>Open Opportunities</span><span style="font-weight:700;color:#0176d3">3 ($84K)</span></div>
+<div class="mini-metric"><span>Last SAP Invoice</span><span style="font-weight:700">Aug 28</span></div>
+<div class="mini-metric"><span>Marketing Touches</span><span style="font-weight:700">7 (30d)</span></div>
+<div class="mini-metric"><span>NPS Score</span><span style="font-weight:700;color:#2e844a">8.4/10</span></div>
+<div class="mini-metric"><span>Contract Renewal</span><span style="font-weight:700;color:#fe9339">Dec 15</span></div>
+<button class="mini-btn">View Full History →</button>`},
+{title:'🤖 AI Deal Coach',html:`
+<h4>🤖 Agentforce Insights</h4>
+<div class="mini-card" style="border-left:3px solid #ea001e"><div class="label">⚠️ At-Risk Deal</div><div class="value">Valley Ag Co — No activity in 21 days. Suggest: schedule check-in call.</div></div>
+<div class="mini-card" style="border-left:3px solid #2e844a"><div class="label">🎯 High Score (92/100)</div><div class="value">Heartland Seeds — Budget confirmed, timeline locked. Push for close this week.</div></div>
+<div class="mini-card" style="border-left:3px solid #0176d3"><div class="label">💡 Coaching Tip</div><div class="value">"Your win rate jumps 18% when you include a site visit before proposal stage."</div></div>
+<button class="mini-btn">📊 See Full Pipeline Analysis</button>`},
+{title:'🎙 Voice-to-CRM',html:`
+<h4 style="margin:0 0 10px">🎙 Voice Note — Transcribing...</h4>
+<div class="mini-card"><div class="label">Recording</div><div class="value" style="color:#ea001e">● 00:47 — "Met with Mike, they want 500 gal ProGrow for spring planting, budget around $40K..."</div></div>
+<div style="background:#e8f4fd;border-radius:8px;padding:12px;margin:10px 0;text-align:center">
+  <span style="font-size:.8rem;color:#0176d3">Agentforce processing</span>
+  <div style="display:flex;justify-content:center;gap:4px;margin-top:6px"><div style="width:6px;height:6px;background:#0176d3;border-radius:50%;animation:dot-bounce .6s infinite"></div><div style="width:6px;height:6px;background:#0176d3;border-radius:50%;animation:dot-bounce .6s .15s infinite"></div><div style="width:6px;height:6px;background:#0176d3;border-radius:50%;animation:dot-bounce .6s .3s infinite"></div></div>
+</div>
+<div class="mini-card"><div class="label">✅ Auto-Extracted</div><div class="value">Product: ProGrow 360 · Qty: 500 gal<br>Budget: $40K · Timeline: Spring '27</div></div>
+<div class="mini-card"><div class="label">📝 Action Items</div><div class="value">1. Send quote by Thursday<br>2. Schedule field trial demo<br>3. Loop in SE for technical Q&A</div></div>
+<button class="mini-btn">✅ Save to Opportunity</button>`},
+{title:'✉️ AI Follow-Up',html:`
+<h4 style="margin:0 0 10px">✉️ Agentforce Email Draft</h4>
+<div style="background:#e8f4fd;border-radius:8px;padding:10px;margin:8px 0;text-align:center">
+  <span style="font-size:.8rem;color:#0176d3">Drafting personalized email...</span>
+  <div style="display:flex;justify-content:center;gap:4px;margin-top:6px"><div style="width:6px;height:6px;background:#0176d3;border-radius:50%;animation:dot-bounce .6s infinite"></div><div style="width:6px;height:6px;background:#0176d3;border-radius:50%;animation:dot-bounce .6s .15s infinite"></div><div style="width:6px;height:6px;background:#0176d3;border-radius:50%;animation:dot-bounce .6s .3s infinite"></div></div>
+</div>
+<div class="mini-card" style="border-left:3px solid #0176d3"><div class="label">To: Mike Torres · Subject: ProGrow Quote Follow-Up</div><div class="value" style="font-size:.78rem;line-height:1.5">Hi Mike,<br><br>Great meeting today. As discussed, I'll have the ProGrow 360 quote for 500 gallons over to you by Thursday. The Tier 3 volume pricing should bring you to ~$38,200.<br><br>Let me know if you need anything else for spring planning.<br><br>— PI AgSciences Team</div></div>
+<div style="display:flex;gap:8px;margin-top:8px">
+<button class="mini-btn" style="flex:1;background:#2e844a">✅ Send</button>
+<button class="mini-btn" style="flex:1">✏️ Edit</button>
+</div>`},
+{title:'📋 Day Recap',html:`
+<h4 style="margin:0 0 10px">📋 End-of-Day Summary</h4>
+<div class="mini-card"><div class="label">Today's Activity</div><div class="value" style="font-weight:700">3 visits · 2 quotes sent · 1 deal advanced</div></div>
+<div class="mini-metric"><span>Pipeline Moved</span><span style="font-weight:700;color:#2e844a">+$84,000</span></div>
+<div class="mini-metric"><span>Follow-Ups Scheduled</span><span style="font-weight:700">5</span></div>
+<div class="mini-metric"><span>AI Emails Sent</span><span style="font-weight:700;color:#0176d3">3</span></div>
+<div class="mini-card" style="border-left:3px solid #fe9339"><div class="label">🔔 Tomorrow's Priorities</div><div class="value">1. Close Heartland Seeds ($52K)<br>2. Send Valley Ag re-engagement<br>3. Midwest Dealer Group — proposal review</div></div>
+<button class="mini-btn">👍 Log Day & Sign Off</button>`}
+];
+
+function setDemoStep(i){
+  document.querySelectorAll('.demo-step').forEach(s=>s.classList.remove('active'));
+  document.querySelector(`.demo-step[data-step="${i}"]`).classList.add('active');
+  const sc=phoneScreens[i];
+  document.getElementById('phoneContent').innerHTML=sc.html;
+}
+setDemoStep(0);
+
+// === BEFORE / AFTER TOGGLE ===
+function toggleBA(which){
+  document.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.comparison-panel').forEach(p=>p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('panel-'+which).classList.add('active');
+}
+
+// === DASHBOARD TABS ===
+function setDashTab(id){
+  document.querySelectorAll('.dash-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.dash-panel').forEach(p=>p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('dash-'+id).classList.add('active');
+}
+
+// === ROI CALCULATOR ===
+function calcROI(){
+  const reps=+document.getElementById('sliderReps').value;
+  const rev=+document.getElementById('sliderRev').value;
+  const prod=+document.getElementById('sliderProd').value;
+  const hrs=+document.getElementById('sliderHours').value;
+  const win=+document.getElementById('sliderWin').value;
+  document.getElementById('repCount').textContent=reps;
+  document.getElementById('revPerRep').textContent='$'+rev.toLocaleString();
+  document.getElementById('prodGain').textContent=prod+'%';
+  document.getElementById('hoursSaved').textContent=hrs;
+  document.getElementById('winImprove').textContent=win+'%';
+  const revLift=reps*rev*(prod/100);
+  const prodSave=reps*hrs*50*25;
+  const winImpact=reps*rev*(win/100);
+  const investment=65961;
+  const totalReturn=revLift+prodSave+winImpact;
+  const roi=Math.round(totalReturn/investment);
+  document.getElementById('resultRevLift').textContent='$'+Math.round(revLift).toLocaleString();
+  document.getElementById('resultProdSave').textContent='$'+Math.round(prodSave).toLocaleString();
+  document.getElementById('resultWinImpact').textContent='$'+Math.round(winImpact).toLocaleString();
+  document.getElementById('resultInvestment').textContent='-$'+investment.toLocaleString();
+  document.getElementById('resultROI').textContent=roi+'x';
+}
+calcROI();
+
+// === AI ARCHITECTURE STACK ===
+const stackData=[
+  {title:'Sales Cloud Core',desc:'Your CRM foundation — accounts, contacts, opportunities, and pipeline management built for agricultural sales.',features:['Account & Contact Management','Opportunity Tracking','Pipeline Dashboards','Mobile CRM Access','Territory Management','Activity Logging','Forecasting','Custom Reports']},
+  {title:'Agentforce for Sales',desc:'AI agents that autonomously research accounts, draft follow-ups, score deals, and coach your reps in real time.',features:['AI Deal Scoring','Automated Follow-Ups','Call Summary Generation','Coaching Recommendations','Next-Best-Action','Competitive Insights','Meeting Prep Briefs','Pipeline Risk Alerts']},
+  {title:'Einstein Trust Layer',desc:'Enterprise-grade AI security — your data never trains models, with built-in toxicity filters and audit trails.',features:['Zero Data Retention','Prompt Injection Defense','Toxicity Filtering','Audit Trail Logging','Role-Based AI Access','PII Masking','Compliance Controls','Model Transparency']},
+  {title:'Data Cloud',desc:'Unified customer profiles from SAP, email, web, and CRM — a single source of truth powering every AI action.',features:['SAP ERP Integration','Unified Customer Profiles','Real-Time Data Sync','Identity Resolution','Segmentation Engine','Data Harmonization','Consent Management','API Connectivity']},
+  {title:'Marketing Cloud Growth',desc:'AI-powered campaigns that nurture dealer relationships with personalized journeys, triggered by real CRM events.',features:['Email Campaign Builder','Journey Automation','Lead Scoring','Landing Pages','A/B Testing','CRM-Triggered Sends','Engagement Analytics','Template Library']}
+];
+function setStackLayer(i){
+  document.querySelectorAll('.stack-layer').forEach((l,idx)=>{
+    l.classList.toggle('active',idx===i);
+  });
+  const d=stackData[i];
+  const title=document.getElementById('stackTitle');
+  const desc=document.getElementById('stackDesc');
+  const features=document.getElementById('stackFeatures');
+  if(title) title.textContent=d.title;
+  if(desc) desc.textContent=d.desc;
+  if(features) features.innerHTML=d.features.map(f=>`<li>${f}</li>`).join('');
+}
+
+// === ANIMATED COUNTERS ===
+function fmtCount(val,fmt){
+  if(fmt==='millions') return (val/1000000).toFixed(1)+'M';
+  return val.toLocaleString();
+}
+function animateCounters(){
+  document.querySelectorAll('.counter').forEach(el=>{
+    if(el.dataset.animated) return;
+    const target=parseFloat(el.dataset.target);
+    const suffix=el.dataset.suffix||'';
+    const prefix=el.dataset.prefix||'';
+    const fmt=el.dataset.format||'';
+    const duration=1200;
+    const start=performance.now();
+    el.dataset.animated='true';
+    function tick(now){
+      const elapsed=now-start;
+      const progress=Math.min(elapsed/duration,1);
+      const eased=1-Math.pow(1-progress,3);
+      const current=Math.round(target*eased);
+      el.textContent=prefix+fmtCount(current,fmt)+suffix;
+      if(progress<1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+}
+const counterObserver=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting) animateCounters()});
+},{threshold:0.3});
+document.querySelectorAll('.counter').forEach(el=>counterObserver.observe(el));
+
+// === ACTIVE NAV LINK ===
+const sections=document.querySelectorAll('section[id]');
+window.addEventListener('scroll',()=>{
+  let current='';
+  sections.forEach(s=>{if(window.scrollY>=s.offsetTop-200)current=s.getAttribute('id')});
+  document.querySelectorAll('.nav-links a').forEach(a=>{
+    a.classList.toggle('active',a.getAttribute('href')==='#'+current);
+  });
+});
+</script>
+</body>
+</html>
