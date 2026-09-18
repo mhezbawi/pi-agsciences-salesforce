@@ -105,32 +105,6 @@ nav .container{display:flex;align-items:center;justify-content:space-between}
 .product-details li::before{content:'✓';position:absolute;left:0;color:var(--green);font-weight:700}
 .expand-hint{padding:0 32px 16px;font-size:.75rem;color:var(--sf-blue);font-weight:500}
 
-/* ===== SPROUT SOCIAL ===== */
-.sprout-social{background:linear-gradient(135deg,#2c5234 0%,#1a5cff 100%);color:#fff;position:relative;overflow:hidden}
-.sprout-social::before{content:'';position:absolute;top:-30%;right:-15%;width:500px;height:500px;border-radius:50%;background:rgba(255,255,255,.04);pointer-events:none}
-.sprout-hero-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:center}
-.sprout-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:32px}
-.sprout-stat{background:rgba(255,255,255,.1);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.15);border-radius:var(--radius);padding:20px;text-align:center}
-.sprout-stat .stat-num{font-size:1.6rem;font-weight:800}
-.sprout-stat .stat-desc{font-size:.75rem;opacity:.7;margin-top:2px}
-.sprout-products{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:32px}
-.sprout-product{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);padding:20px;text-align:center;transition:all .3s}
-.sprout-product:hover{background:rgba(255,255,255,.15);transform:translateY(-2px)}
-.sprout-product .sp-icon{font-size:1.5rem;margin-bottom:8px}
-.sprout-product h4{font-size:.9rem;margin-bottom:4px}
-.sprout-product p{font-size:.75rem;opacity:.7}
-.sprout-integrations{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:32px}
-.sprout-integration{background:var(--white);border-radius:var(--radius);padding:20px;color:var(--gray-800);display:flex;align-items:flex-start;gap:12px;transition:all .3s}
-.sprout-integration:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
-.sprout-integration .int-icon{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
-.sprout-integration h4{font-size:.9rem;margin-bottom:4px}
-.sprout-integration p{font-size:.78rem;color:var(--gray-600);line-height:1.4}
-.sprout-roi-bar{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap;justify-content:center}
-.sprout-roi-item{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:var(--radius);padding:16px 24px;text-align:center;flex:1;min-width:140px}
-.sprout-roi-item .roi-num{font-size:1.4rem;font-weight:800}
-.sprout-roi-item .roi-desc{font-size:.7rem;opacity:.7;margin-top:2px}
-@media(max-width:900px){.sprout-hero-grid{grid-template-columns:1fr}}
-
 /* ===== PHONE DEMO ===== */
 .phone-demo{background:linear-gradient(135deg,var(--sf-dark),#0b3d91);color:#fff;position:relative;overflow:hidden}
 .phone-demo-layout{display:grid;grid-template-columns:1fr 340px;gap:48px;align-items:center}
@@ -416,7 +390,6 @@ footer{background:var(--sf-dark);color:rgba(255,255,255,.5);text-align:center;pa
     <li><a href="#hero">Overview</a></li>
     <li><a href="#challenges">Challenges</a></li>
     <li><a href="#products">Solution</a></li>
-    <li><a href="#sprout">Sprout Social</a></li>
     <li><a href="#architecture">Architecture</a></li>
     <li><a href="#demo">Demo</a></li>
     <li><a href="#lightning-dash">Dashboard</a></li>
@@ -653,85 +626,6 @@ footer{background:var(--sf-dark);color:rgba(255,255,255,.5);text-align:center;pa
       </div>
     </div>
 
-  </div>
-</div>
-</section>
-
-<!-- SPROUT SOCIAL - MARKETING PARTNER -->
-<section class="sprout-social" id="sprout">
-<div class="container">
-  <div class="sprout-hero-grid">
-    <div>
-      <span class="section-label" style="color:rgba(255,255,255,.6)">Marketing Requirement</span>
-      <h2 style="color:#fff;font-size:clamp(1.5rem,3.5vw,2.2rem)">Sprout Social + Salesforce</h2>
-      <p style="opacity:.85;font-size:1.05rem;max-width:540px;margin-bottom:8px">Turn social media into a revenue engine. Sprout Social is Salesforce's premier social management partner, connecting social engagement directly to your CRM for a complete customer view.</p>
-      <p style="opacity:.7;font-size:.9rem;max-width:540px">"By seamlessly integrating social conversations to Salesforce, Sprout Social enables businesses to unify social data with their customer data to deliver better, more personalized service."</p>
-      <p style="font-size:.8rem;opacity:.5;margin-top:4px">- Kishan Chetan, EVP & GM, Salesforce Service Cloud</p>
-      <div class="sprout-stats">
-        <div class="sprout-stat"><div class="stat-num">32K+</div><div class="stat-desc">Customers in 100+ Countries</div></div>
-        <div class="sprout-stat"><div class="stat-num">#1</div><div class="stat-desc">G2 Product Ranking 2024</div></div>
-        <div class="sprout-stat"><div class="stat-num">96%</div><div class="stat-desc">Customer Satisfaction (CSAT)</div></div>
-        <div class="sprout-stat"><div class="stat-num">600M+</div><div class="stat-desc">Messages Processed Daily</div></div>
-      </div>
-    </div>
-    <div>
-      <h3 style="font-size:1.1rem;margin-bottom:16px;opacity:.9">Core Products</h3>
-      <div class="sprout-products">
-        <div class="sprout-product"><div class="sp-icon">📅</div><h4>Publishing</h4><p>Schedule & publish across all social channels</p></div>
-        <div class="sprout-product"><div class="sp-icon">💬</div><h4>Engagement</h4><p>Unified inbox for all social conversations</p></div>
-        <div class="sprout-product"><div class="sp-icon">📊</div><h4>Analytics</h4><p>Performance reporting & competitive benchmarks</p></div>
-        <div class="sprout-product"><div class="sp-icon">👂</div><h4>Listening</h4><p>Brand monitoring & sentiment analysis</p></div>
-        <div class="sprout-product"><div class="sp-icon">🗣️</div><h4>Advocacy</h4><p>Employee advocacy & brand amplification</p></div>
-        <div class="sprout-product"><div class="sp-icon">⭐</div><h4>Influencer</h4><p>Influencer discovery & campaign management</p></div>
-      </div>
-    </div>
-  </div>
-
-  <div style="text-align:center;margin-top:64px">
-    <h3 style="font-size:1.3rem;margin-bottom:8px">Salesforce Integrations</h3>
-    <p style="opacity:.7;font-size:.9rem;max-width:500px;margin:0 auto 24px">Sprout connects across the entire Salesforce platform, enriching every cloud with social intelligence.</p>
-  </div>
-  <div class="sprout-integrations">
-    <div class="sprout-integration fade-in">
-      <div class="int-icon" style="background:#e8f4fd;color:#0176d3">🎧</div>
-      <div><h4>Service Cloud</h4><p>Omni-channel social care with automated case routing. Transform social inquiries into support cases instantly.</p></div>
-    </div>
-    <div class="sprout-integration fade-in">
-      <div class="int-icon" style="background:#e8f4fd;color:#0176d3">☁️</div>
-      <div><h4>Sales Cloud</h4><p>Generate leads directly from social interactions. Social signals enrich prospect profiles for smarter outreach.</p></div>
-    </div>
-    <div class="sprout-integration fade-in">
-      <div class="int-icon" style="background:#fff3e0;color:#e65100">📣</div>
-      <div><h4>Marketing Cloud</h4><p>Build personalized journeys triggered by social engagement. Social data powers smarter segmentation.</p></div>
-    </div>
-    <div class="sprout-integration fade-in">
-      <div class="int-icon" style="background:#e8f5e9;color:#2e7d32">📊</div>
-      <div><h4>Data Cloud</h4><p>Enrich customer 360 profiles with social data. Unify social interactions with CRM records for complete context.</p></div>
-    </div>
-    <div class="sprout-integration fade-in">
-      <div class="int-icon" style="background:#f3e5f5;color:#7b1fa2">🤖</div>
-      <div><h4>Agentforce</h4><p>AI agents for social response, trend detection, content creation, and product feedback analysis.</p></div>
-    </div>
-    <div class="sprout-integration fade-in">
-      <div class="int-icon" style="background:#e3f5e8;color:#2e844a">💬</div>
-      <div><h4>Slack</h4><p>Streamlined social approvals and workflows. Get notified and collaborate on social content without leaving Slack.</p></div>
-    </div>
-  </div>
-
-  <div style="text-align:center;margin-top:48px">
-    <h3 style="font-size:1.1rem;margin-bottom:4px">Proven ROI (Forrester Research)</h3>
-    <p style="opacity:.6;font-size:.8rem;margin-bottom:16px">Total Economic Impact study, 3-year analysis</p>
-  </div>
-  <div class="sprout-roi-bar">
-    <div class="sprout-roi-item"><div class="roi-num">233%</div><div class="roi-desc">ROI over 3 Years</div></div>
-    <div class="sprout-roi-item"><div class="roi-num">92%</div><div class="roi-desc">Care Efficiency Improvement</div></div>
-    <div class="sprout-roi-item"><div class="roi-num">55%</div><div class="roi-desc">Productivity Increase (Yr 3)</div></div>
-    <div class="sprout-roi-item"><div class="roi-num">$142K</div><div class="roi-desc">Business Savings (3 Yr)</div></div>
-    <div class="sprout-roi-item"><div class="roi-num">2 hrs</div><div class="roi-desc">Saved per Person per Week</div></div>
-  </div>
-
-  <div style="text-align:center;margin-top:40px">
-    <p style="font-size:.85rem;opacity:.6;max-width:600px;margin:0 auto">Case studies: McDonald's reduced care costs 56% across 92M+ followers. Disney Streaming onboarded 400 agents in Service Cloud with Sprout replacing Social Studio.</p>
   </div>
 </div>
 </section>
@@ -1386,7 +1280,7 @@ footer{background:var(--sf-dark);color:rgba(255,255,255,.5);text-align:center;pa
       <span class="phase-pill">Phase 3</span>
       <div class="expansion-icon">🎧</div>
       <h4>Service Cloud</h4>
-      <p>Centralize dealer support cases, automate SLA tracking, and add social care with Sprout Social.</p>
+      <p>Centralize dealer support cases, automate SLA tracking, and deliver omni-channel customer service.</p>
       <span class="expansion-tag">Customer Retention</span>
     </div>
     <div class="expansion-card fade-in">
