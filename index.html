@@ -325,6 +325,9 @@ footer{background:var(--sf-dark);color:rgba(255,255,255,.5);text-align:center;pa
 .mini-activity-item .act-time{font-size:.7rem;color:var(--gray-600);white-space:nowrap}
 @media(max-width:768px){.browser-body{grid-template-columns:1fr}.dash-sidebar{display:none}.dash-kpis{grid-template-columns:repeat(2,1fr)}.dash-grid-lower{grid-template-columns:1fr}}
 
+/* ===== LIGHTNING INTERACTIVE PANELS ===== */
+.lt-panel{display:none}.lt-panel.active{display:block}
+
 /* ===== FUTURE EXPANSION ===== */
 .future-expand{background:var(--gray-100)}
 .expansion-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px}
@@ -965,68 +968,194 @@ footer{background:var(--sf-dark);color:rgba(255,255,255,.5);text-align:center;pa
       <span class="chrome-url">https://piagsciences.lightning.force.com/dashboards</span>
     </div>
     <div style="display:flex;min-height:420px">
-      <div class="dash-sidebar">
+      <div class="dash-sidebar" id="ltSidebar">
         <div style="padding:12px;border-bottom:1px solid rgba(255,255,255,.1)">
           <img src="https://www.piindustries.com/wp-content/uploads/2026/01/PI-logo-RGB-scaled-1.png" alt="PI" style="height:24px;filter:brightness(10)">
         </div>
-        <div class="sidebar-item active" style="padding:10px 14px;font-size:.8rem;color:rgba(255,255,255,.9);background:rgba(255,255,255,.1);border-radius:6px;margin:8px 6px;cursor:pointer">📊 Dashboard</div>
-        <div class="sidebar-item" style="padding:10px 14px;font-size:.8rem;color:rgba(255,255,255,.5);margin:8px 6px;cursor:pointer">👤 Accounts</div>
-        <div class="sidebar-item" style="padding:10px 14px;font-size:.8rem;color:rgba(255,255,255,.5);margin:8px 6px;cursor:pointer">🤝 Opportunities</div>
-        <div class="sidebar-item" style="padding:10px 14px;font-size:.8rem;color:rgba(255,255,255,.5);margin:8px 6px;cursor:pointer">📧 Campaigns</div>
-        <div class="sidebar-item" style="padding:10px 14px;font-size:.8rem;color:rgba(255,255,255,.5);margin:8px 6px;cursor:pointer">🤖 Agentforce</div>
-        <div class="sidebar-item" style="padding:10px 14px;font-size:.8rem;color:rgba(255,255,255,.5);margin:8px 6px;cursor:pointer">📋 Reports</div>
+        <div class="sidebar-item active" onclick="setLightningTab('lt-dashboard',this)" style="padding:10px 14px;font-size:.8rem;color:rgba(255,255,255,.9);background:rgba(255,255,255,.1);border-radius:6px;margin:8px 6px;cursor:pointer">📊 Dashboard</div>
+        <div class="sidebar-item" onclick="setLightningTab('lt-accounts',this)" style="padding:10px 14px;font-size:.8rem;color:rgba(255,255,255,.5);margin:8px 6px;cursor:pointer">👤 Accounts</div>
+        <div class="sidebar-item" onclick="setLightningTab('lt-opps',this)" style="padding:10px 14px;font-size:.8rem;color:rgba(255,255,255,.5);margin:8px 6px;cursor:pointer">🤝 Opportunities</div>
+        <div class="sidebar-item" onclick="setLightningTab('lt-campaigns',this)" style="padding:10px 14px;font-size:.8rem;color:rgba(255,255,255,.5);margin:8px 6px;cursor:pointer">📧 Campaigns</div>
+        <div class="sidebar-item" onclick="setLightningTab('lt-agentforce',this)" style="padding:10px 14px;font-size:.8rem;color:rgba(255,255,255,.5);margin:8px 6px;cursor:pointer">🤖 Agentforce</div>
+        <div class="sidebar-item" style="padding:10px 14px;font-size:.8rem;color:rgba(255,255,255,.3);margin:8px 6px;cursor:default">📋 Reports</div>
       </div>
       <div class="dash-main">
-        <div class="dash-kpis">
-          <div class="kpi-card">
-            <div style="font-size:.7rem;color:var(--gray-600);text-transform:uppercase;letter-spacing:.5px">Pipeline Value</div>
-            <div class="counter" data-target="4200000" data-prefix="$" data-suffix="" data-format="millions" style="font-size:1.5rem;font-weight:700;color:var(--gray-800);font-variant-numeric:tabular-nums">$0</div>
-            <div style="font-size:.7rem;color:var(--green)">↑ 28% vs. last quarter</div>
-          </div>
-          <div class="kpi-card">
-            <div style="font-size:.7rem;color:var(--gray-600);text-transform:uppercase;letter-spacing:.5px">Win Rate</div>
-            <div class="counter" data-target="34" data-suffix="%" style="font-size:1.5rem;font-weight:700;color:var(--green);font-variant-numeric:tabular-nums">0%</div>
-            <div style="font-size:.7rem;color:var(--green)">↑ 12pts improvement</div>
-          </div>
-          <div class="kpi-card">
-            <div style="font-size:.7rem;color:var(--gray-600);text-transform:uppercase;letter-spacing:.5px">Avg Deal Cycle</div>
-            <div class="counter" data-target="42" data-suffix=" days" style="font-size:1.5rem;font-weight:700;color:var(--sf-blue);font-variant-numeric:tabular-nums">0 days</div>
-            <div style="font-size:.7rem;color:var(--green)">↓ 18 days faster</div>
-          </div>
-          <div class="kpi-card">
-            <div style="font-size:.7rem;color:var(--gray-600);text-transform:uppercase;letter-spacing:.5px">Active Campaigns</div>
-            <div class="counter" data-target="12" style="font-size:1.5rem;font-weight:700;color:#1a5cff;font-variant-numeric:tabular-nums">0</div>
-            <div style="font-size:.7rem;color:var(--gray-600)">MCG automated</div>
-          </div>
-        </div>
-        <div class="agent-banner">
-          <div style="display:flex;align-items:center;gap:8px">
-            <span style="font-size:1.1rem">🤖</span>
-            <strong>Agentforce Insight:</strong>
-            <span>3 deals need follow-up today. Top priority: <em>Midwest Dealer Group</em> — decision expected this week.</span>
-          </div>
-          <span class="pulse-dot"></span>
-        </div>
-        <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:16px;margin-top:16px">
-          <div class="mini-pipeline">
-            <div style="font-weight:600;font-size:.85rem;margin-bottom:12px;color:var(--gray-800)">Pipeline by Stage</div>
-            <div style="display:flex;flex-direction:column;gap:8px">
-              <div><div style="display:flex;justify-content:space-between;font-size:.75rem;margin-bottom:3px"><span>Prospecting</span><span>$820K</span></div><div style="background:var(--gray-200);border-radius:4px;height:8px"><div style="background:var(--sf-accent);height:100%;border-radius:4px;width:20%"></div></div></div>
-              <div><div style="display:flex;justify-content:space-between;font-size:.75rem;margin-bottom:3px"><span>Discovery</span><span>$1.1M</span></div><div style="background:var(--gray-200);border-radius:4px;height:8px"><div style="background:var(--sf-blue);height:100%;border-radius:4px;width:28%"></div></div></div>
-              <div><div style="display:flex;justify-content:space-between;font-size:.75rem;margin-bottom:3px"><span>Proposal</span><span>$1.4M</span></div><div style="background:var(--gray-200);border-radius:4px;height:8px"><div style="background:#1a5cff;height:100%;border-radius:4px;width:35%"></div></div></div>
-              <div><div style="display:flex;justify-content:space-between;font-size:.75rem;margin-bottom:3px"><span>Negotiation</span><span>$680K</span></div><div style="background:var(--gray-200);border-radius:4px;height:8px"><div style="background:var(--green);height:100%;border-radius:4px;width:17%"></div></div></div>
+
+        <!-- DASHBOARD PANEL -->
+        <div class="lt-panel active" id="lt-dashboard">
+          <div class="dash-kpis">
+            <div class="kpi-card">
+              <div style="font-size:.7rem;color:var(--gray-600);text-transform:uppercase;letter-spacing:.5px">Pipeline Value</div>
+              <div class="counter" data-target="4200000" data-prefix="$" data-suffix="" data-format="millions" style="font-size:1.5rem;font-weight:700;color:var(--gray-800);font-variant-numeric:tabular-nums">$0</div>
+              <div style="font-size:.7rem;color:var(--green)">↑ 28% vs. last quarter</div>
+            </div>
+            <div class="kpi-card">
+              <div style="font-size:.7rem;color:var(--gray-600);text-transform:uppercase;letter-spacing:.5px">Win Rate</div>
+              <div class="counter" data-target="34" data-suffix="%" style="font-size:1.5rem;font-weight:700;color:var(--green);font-variant-numeric:tabular-nums">0%</div>
+              <div style="font-size:.7rem;color:var(--green)">↑ 12pts improvement</div>
+            </div>
+            <div class="kpi-card">
+              <div style="font-size:.7rem;color:var(--gray-600);text-transform:uppercase;letter-spacing:.5px">Avg Deal Cycle</div>
+              <div class="counter" data-target="42" data-suffix=" days" style="font-size:1.5rem;font-weight:700;color:var(--sf-blue);font-variant-numeric:tabular-nums">0 days</div>
+              <div style="font-size:.7rem;color:var(--green)">↓ 18 days faster</div>
+            </div>
+            <div class="kpi-card">
+              <div style="font-size:.7rem;color:var(--gray-600);text-transform:uppercase;letter-spacing:.5px">Active Campaigns</div>
+              <div class="counter" data-target="12" style="font-size:1.5rem;font-weight:700;color:#1a5cff;font-variant-numeric:tabular-nums">0</div>
+              <div style="font-size:.7rem;color:var(--gray-600)">MCG automated</div>
             </div>
           </div>
-          <div class="mini-activity-list">
-            <div style="font-weight:600;font-size:.85rem;margin-bottom:12px;color:var(--gray-800)">Recent Activity</div>
-            <div style="display:flex;flex-direction:column;gap:10px">
-              <div style="display:flex;gap:8px;font-size:.75rem"><span style="color:var(--green)">●</span><div><strong>Deal Won</strong> — Southern Ag Supply ($45K)<br><span style="color:var(--gray-600)">2 hours ago</span></div></div>
-              <div style="display:flex;gap:8px;font-size:.75rem"><span style="color:var(--sf-blue)">●</span><div><strong>AI Email Sent</strong> — Follow-up to Delta Seeds<br><span style="color:var(--gray-600)">3 hours ago</span></div></div>
-              <div style="display:flex;gap:8px;font-size:.75rem"><span style="color:var(--orange)">●</span><div><strong>Meeting Logged</strong> — Crop Solutions Inc call<br><span style="color:var(--gray-600)">Yesterday</span></div></div>
-              <div style="display:flex;gap:8px;font-size:.75rem"><span style="color:#1a5cff">●</span><div><strong>Campaign Launched</strong> — Q4 Product Promo<br><span style="color:var(--gray-600)">Yesterday</span></div></div>
+          <div class="agent-banner">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:1.1rem">🤖</span>
+              <strong>Agentforce Insight:</strong>
+              <span>3 deals need follow-up today. Top priority: <em>Midwest Dealer Group</em> — decision expected this week.</span>
+            </div>
+            <span class="pulse-dot"></span>
+          </div>
+          <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:16px;margin-top:16px">
+            <div class="mini-pipeline">
+              <div style="font-weight:600;font-size:.85rem;margin-bottom:12px;color:var(--gray-800)">Pipeline by Stage</div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div><div style="display:flex;justify-content:space-between;font-size:.75rem;margin-bottom:3px"><span>Prospecting</span><span>$820K</span></div><div style="background:var(--gray-200);border-radius:4px;height:8px"><div style="background:var(--sf-accent);height:100%;border-radius:4px;width:20%"></div></div></div>
+                <div><div style="display:flex;justify-content:space-between;font-size:.75rem;margin-bottom:3px"><span>Discovery</span><span>$1.1M</span></div><div style="background:var(--gray-200);border-radius:4px;height:8px"><div style="background:var(--sf-blue);height:100%;border-radius:4px;width:28%"></div></div></div>
+                <div><div style="display:flex;justify-content:space-between;font-size:.75rem;margin-bottom:3px"><span>Proposal</span><span>$1.4M</span></div><div style="background:var(--gray-200);border-radius:4px;height:8px"><div style="background:#1a5cff;height:100%;border-radius:4px;width:35%"></div></div></div>
+                <div><div style="display:flex;justify-content:space-between;font-size:.75rem;margin-bottom:3px"><span>Negotiation</span><span>$680K</span></div><div style="background:var(--gray-200);border-radius:4px;height:8px"><div style="background:var(--green);height:100%;border-radius:4px;width:17%"></div></div></div>
+              </div>
+            </div>
+            <div class="mini-activity-list">
+              <div style="font-weight:600;font-size:.85rem;margin-bottom:12px;color:var(--gray-800)">Recent Activity</div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <div style="display:flex;gap:8px;font-size:.75rem"><span style="color:var(--green)">●</span><div><strong>Deal Won</strong> — Southern Ag Supply ($45K)<br><span style="color:var(--gray-600)">2 hours ago</span></div></div>
+                <div style="display:flex;gap:8px;font-size:.75rem"><span style="color:var(--sf-blue)">●</span><div><strong>AI Email Sent</strong> — Follow-up to Delta Seeds<br><span style="color:var(--gray-600)">3 hours ago</span></div></div>
+                <div style="display:flex;gap:8px;font-size:.75rem"><span style="color:var(--orange)">●</span><div><strong>Meeting Logged</strong> — Crop Solutions Inc call<br><span style="color:var(--gray-600)">Yesterday</span></div></div>
+                <div style="display:flex;gap:8px;font-size:.75rem"><span style="color:#1a5cff">●</span><div><strong>Campaign Launched</strong> — Q4 Product Promo<br><span style="color:var(--gray-600)">Yesterday</span></div></div>
+              </div>
             </div>
           </div>
         </div>
+
+        <!-- ACCOUNTS PANEL -->
+        <div class="lt-panel" id="lt-accounts" style="display:none">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+            <h4 style="font-size:.95rem;color:var(--sf-dark)">Top Dealer Accounts</h4>
+            <span style="font-size:.7rem;color:var(--gray-600)">5 of 112 accounts</span>
+          </div>
+          <table style="width:100%;border-collapse:collapse;font-size:.78rem">
+            <thead><tr style="border-bottom:2px solid var(--gray-200);text-align:left">
+              <th style="padding:8px 6px;color:var(--gray-600);font-weight:600;font-size:.7rem;text-transform:uppercase">Account</th>
+              <th style="padding:8px 6px;color:var(--gray-600);font-weight:600;font-size:.7rem;text-transform:uppercase">YTD Revenue</th>
+              <th style="padding:8px 6px;color:var(--gray-600);font-weight:600;font-size:.7rem;text-transform:uppercase">Open Opps</th>
+              <th style="padding:8px 6px;color:var(--gray-600);font-weight:600;font-size:.7rem;text-transform:uppercase">Last Activity</th>
+              <th style="padding:8px 6px;color:var(--gray-600);font-weight:600;font-size:.7rem;text-transform:uppercase">Health</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--gray-200)"><td style="padding:10px 6px;font-weight:600">Farm & Field Supply</td><td style="padding:10px 6px">$412,000</td><td style="padding:10px 6px;color:var(--sf-blue);font-weight:700">3 ($84K)</td><td style="padding:10px 6px;color:var(--gray-600)">Today</td><td style="padding:10px 6px"><span style="color:var(--green)">●</span> Active</td></tr>
+              <tr style="border-bottom:1px solid var(--gray-200)"><td style="padding:10px 6px;font-weight:600">MidSouth Ag Distributors</td><td style="padding:10px 6px">$328,500</td><td style="padding:10px 6px;color:var(--sf-blue);font-weight:700">2 ($62K)</td><td style="padding:10px 6px;color:var(--gray-600)">Yesterday</td><td style="padding:10px 6px"><span style="color:var(--green)">●</span> Active</td></tr>
+              <tr style="border-bottom:1px solid var(--gray-200)"><td style="padding:10px 6px;font-weight:600">Heartland Seeds Co.</td><td style="padding:10px 6px">$285,000</td><td style="padding:10px 6px;color:var(--sf-blue);font-weight:700">1 ($52K)</td><td style="padding:10px 6px;color:var(--gray-600)">2 days ago</td><td style="padding:10px 6px"><span style="color:var(--green)">●</span> Active</td></tr>
+              <tr style="border-bottom:1px solid var(--gray-200)"><td style="padding:10px 6px;font-weight:600">Valley Ag Cooperative</td><td style="padding:10px 6px">$198,400</td><td style="padding:10px 6px;color:var(--orange);font-weight:700">1 ($38K)</td><td style="padding:10px 6px;color:var(--red)">21 days ago</td><td style="padding:10px 6px"><span style="color:var(--orange)">●</span> At Risk</td></tr>
+              <tr><td style="padding:10px 6px;font-weight:600">Southern Seed & Chemical</td><td style="padding:10px 6px">$156,200</td><td style="padding:10px 6px;color:var(--sf-blue);font-weight:700">2 ($41K)</td><td style="padding:10px 6px;color:var(--gray-600)">3 days ago</td><td style="padding:10px 6px"><span style="color:var(--green)">●</span> Active</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- OPPORTUNITIES PANEL -->
+        <div class="lt-panel" id="lt-opps" style="display:none">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+            <h4 style="font-size:.95rem;color:var(--sf-dark)">Active Pipeline</h4>
+            <span style="font-size:.7rem;color:var(--gray-600)">$4.2M total</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="background:var(--white);border-radius:8px;padding:14px;box-shadow:var(--shadow);border-left:4px solid var(--green)">
+              <div style="display:flex;justify-content:space-between;align-items:center"><strong style="font-size:.85rem">Heartland Seeds - Spring Order</strong><span style="font-size:.85rem;font-weight:800;color:var(--sf-dark)">$52,000</span></div>
+              <div style="display:flex;gap:16px;margin-top:6px;font-size:.72rem;color:var(--gray-600)"><span>Stage: <strong style="color:var(--green)">Negotiation</strong></span><span>Close: Oct 2</span><span>Prob: 85%</span><span>Owner: J. Martinez</span></div>
+              <div style="background:var(--gray-200);border-radius:3px;height:4px;margin-top:8px"><div style="background:var(--green);height:100%;border-radius:3px;width:85%"></div></div>
+            </div>
+            <div style="background:var(--white);border-radius:8px;padding:14px;box-shadow:var(--shadow);border-left:4px solid var(--sf-blue)">
+              <div style="display:flex;justify-content:space-between;align-items:center"><strong style="font-size:.85rem">MidSouth Ag - Q4 Herbicide Program</strong><span style="font-size:.85rem;font-weight:800;color:var(--sf-dark)">$42,000</span></div>
+              <div style="display:flex;gap:16px;margin-top:6px;font-size:.72rem;color:var(--gray-600)"><span>Stage: <strong style="color:var(--sf-blue)">Proposal</strong></span><span>Close: Oct 15</span><span>Prob: 60%</span><span>Owner: T. Brooks</span></div>
+              <div style="background:var(--gray-200);border-radius:3px;height:4px;margin-top:8px"><div style="background:var(--sf-blue);height:100%;border-radius:3px;width:60%"></div></div>
+            </div>
+            <div style="background:var(--white);border-radius:8px;padding:14px;box-shadow:var(--shadow);border-left:4px solid var(--sf-accent)">
+              <div style="display:flex;justify-content:space-between;align-items:center"><strong style="font-size:.85rem">Farm & Field - ProGrow 360 Expansion</strong><span style="font-size:.85rem;font-weight:800;color:var(--sf-dark)">$84,000</span></div>
+              <div style="display:flex;gap:16px;margin-top:6px;font-size:.72rem;color:var(--gray-600)"><span>Stage: <strong style="color:var(--sf-accent)">Discovery</strong></span><span>Close: Nov 8</span><span>Prob: 40%</span><span>Owner: J. Martinez</span></div>
+              <div style="background:var(--gray-200);border-radius:3px;height:4px;margin-top:8px"><div style="background:var(--sf-accent);height:100%;border-radius:3px;width:40%"></div></div>
+            </div>
+            <div style="background:var(--white);border-radius:8px;padding:14px;box-shadow:var(--shadow);border-left:4px solid var(--orange)">
+              <div style="display:flex;justify-content:space-between;align-items:center"><strong style="font-size:.85rem">Valley Ag - Annual Renewal</strong><span style="font-size:.85rem;font-weight:800;color:var(--sf-dark)">$38,000</span></div>
+              <div style="display:flex;gap:16px;margin-top:6px;font-size:.72rem;color:var(--gray-600)"><span>Stage: <strong style="color:var(--orange)">At Risk</strong></span><span>Close: Oct 30</span><span>Prob: 25%</span><span>Owner: K. Davis</span></div>
+              <div style="background:var(--gray-200);border-radius:3px;height:4px;margin-top:8px"><div style="background:var(--orange);height:100%;border-radius:3px;width:25%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CAMPAIGNS PANEL -->
+        <div class="lt-panel" id="lt-campaigns" style="display:none">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+            <h4 style="font-size:.95rem;color:var(--sf-dark)">Active Campaigns</h4>
+            <span style="font-size:.7rem;padding:3px 10px;border-radius:10px;background:var(--green-light);color:var(--green);font-weight:600">3 Live</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="background:var(--white);border-radius:8px;padding:16px;box-shadow:var(--shadow)">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><strong style="font-size:.85rem">Q4 Product Launch - ProGrow 360</strong><span style="font-size:.65rem;padding:2px 8px;border-radius:10px;background:var(--green-light);color:var(--green);font-weight:600">Active</span></div>
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+                <div style="text-align:center;padding:8px;background:var(--gray-100);border-radius:6px"><div style="font-size:1.1rem;font-weight:800;color:var(--sf-dark)">2,450</div><div style="font-size:.65rem;color:var(--gray-600)">Emails Sent</div></div>
+                <div style="text-align:center;padding:8px;background:var(--gray-100);border-radius:6px"><div style="font-size:1.1rem;font-weight:800;color:var(--sf-blue)">38.2%</div><div style="font-size:.65rem;color:var(--gray-600)">Open Rate</div></div>
+                <div style="text-align:center;padding:8px;background:var(--gray-100);border-radius:6px"><div style="font-size:1.1rem;font-weight:800;color:var(--green)">12.8%</div><div style="font-size:.65rem;color:var(--gray-600)">Click Rate</div></div>
+                <div style="text-align:center;padding:8px;background:var(--gray-100);border-radius:6px"><div style="font-size:1.1rem;font-weight:800;color:#1a5cff">24</div><div style="font-size:.65rem;color:var(--gray-600)">Leads</div></div>
+              </div>
+            </div>
+            <div style="background:var(--white);border-radius:8px;padding:16px;box-shadow:var(--shadow)">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><strong style="font-size:.85rem">Monthly Dealer Newsletter</strong><span style="font-size:.65rem;padding:2px 8px;border-radius:10px;background:var(--green-light);color:var(--green);font-weight:600">Active</span></div>
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+                <div style="text-align:center;padding:8px;background:var(--gray-100);border-radius:6px"><div style="font-size:1.1rem;font-weight:800;color:var(--sf-dark)">1,180</div><div style="font-size:.65rem;color:var(--gray-600)">Emails Sent</div></div>
+                <div style="text-align:center;padding:8px;background:var(--gray-100);border-radius:6px"><div style="font-size:1.1rem;font-weight:800;color:var(--sf-blue)">42.1%</div><div style="font-size:.65rem;color:var(--gray-600)">Open Rate</div></div>
+                <div style="text-align:center;padding:8px;background:var(--gray-100);border-radius:6px"><div style="font-size:1.1rem;font-weight:800;color:var(--green)">9.4%</div><div style="font-size:.65rem;color:var(--gray-600)">Click Rate</div></div>
+                <div style="text-align:center;padding:8px;background:var(--gray-100);border-radius:6px"><div style="font-size:1.1rem;font-weight:800;color:#1a5cff">11</div><div style="font-size:.65rem;color:var(--gray-600)">Leads</div></div>
+              </div>
+            </div>
+            <div style="background:var(--white);border-radius:8px;padding:16px;box-shadow:var(--shadow)">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><strong style="font-size:.85rem">LinkedIn Lead Gen - Ag Decision Makers</strong><span style="font-size:.65rem;padding:2px 8px;border-radius:10px;background:#fff3e0;color:#e65100;font-weight:600">Optimizing</span></div>
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+                <div style="text-align:center;padding:8px;background:var(--gray-100);border-radius:6px"><div style="font-size:1.1rem;font-weight:800;color:var(--sf-dark)">8,200</div><div style="font-size:.65rem;color:var(--gray-600)">Impressions</div></div>
+                <div style="text-align:center;padding:8px;background:var(--gray-100);border-radius:6px"><div style="font-size:1.1rem;font-weight:800;color:var(--sf-blue)">3.2%</div><div style="font-size:.65rem;color:var(--gray-600)">CTR</div></div>
+                <div style="text-align:center;padding:8px;background:var(--gray-100);border-radius:6px"><div style="font-size:1.1rem;font-weight:800;color:var(--green)">$18</div><div style="font-size:.65rem;color:var(--gray-600)">Cost/Lead</div></div>
+                <div style="text-align:center;padding:8px;background:var(--gray-100);border-radius:6px"><div style="font-size:1.1rem;font-weight:800;color:#1a5cff">33</div><div style="font-size:.65rem;color:var(--gray-600)">Leads</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AGENTFORCE PANEL -->
+        <div class="lt-panel" id="lt-agentforce" style="display:none">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+            <h4 style="font-size:.95rem;color:var(--sf-dark)">Agentforce Activity</h4>
+            <div class="ai-thinking"><span>🤖</span> Active <span class="dots"><span></span><span></span><span></span></span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;gap:10px;padding:12px;background:var(--white);border-radius:8px;box-shadow:var(--shadow);border-left:3px solid #7c3aed">
+              <span style="font-size:1.1rem">🎯</span>
+              <div><strong style="font-size:.82rem">Deal Score Updated</strong><div style="font-size:.75rem;color:var(--gray-600);margin-top:2px">Heartland Seeds moved to 85/100 (was 72). Budget confirmed by CFO in last call.</div><div style="font-size:.65rem;color:var(--gray-600);margin-top:4px">12 min ago</div></div>
+            </div>
+            <div style="display:flex;gap:10px;padding:12px;background:var(--white);border-radius:8px;box-shadow:var(--shadow);border-left:3px solid var(--sf-blue)">
+              <span style="font-size:1.1rem">✉️</span>
+              <div><strong style="font-size:.82rem">Follow-Up Email Drafted</strong><div style="font-size:.75rem;color:var(--gray-600);margin-top:2px">Auto-drafted post-meeting email for Farm & Field Supply. References ProGrow 360 pricing discussed. Awaiting rep review.</div><div style="font-size:.65rem;color:var(--gray-600);margin-top:4px">38 min ago</div></div>
+            </div>
+            <div style="display:flex;gap:10px;padding:12px;background:var(--white);border-radius:8px;box-shadow:var(--shadow);border-left:3px solid var(--red)">
+              <span style="font-size:1.1rem">⚠️</span>
+              <div><strong style="font-size:.82rem">Risk Alert: Valley Ag Cooperative</strong><div style="font-size:.75rem;color:var(--gray-600);margin-top:2px">No activity in 21 days. Annual renewal ($38K) at risk. Recommended: Schedule check-in call with buyer this week.</div><div style="font-size:.65rem;color:var(--gray-600);margin-top:4px">1 hour ago</div></div>
+            </div>
+            <div style="display:flex;gap:10px;padding:12px;background:var(--white);border-radius:8px;box-shadow:var(--shadow);border-left:3px solid var(--green)">
+              <span style="font-size:1.1rem">💡</span>
+              <div><strong style="font-size:.82rem">Coaching Insight</strong><div style="font-size:.75rem;color:var(--gray-600);margin-top:2px">Reps who include a site visit before proposal stage have an 18% higher win rate. 3 deals in Proposal stage have no recent visit logged.</div><div style="font-size:.65rem;color:var(--gray-600);margin-top:4px">2 hours ago</div></div>
+            </div>
+            <div style="display:flex;gap:10px;padding:12px;background:var(--white);border-radius:8px;box-shadow:var(--shadow);border-left:3px solid var(--orange)">
+              <span style="font-size:1.1rem">📊</span>
+              <div><strong style="font-size:.82rem">Pipeline Summary Generated</strong><div style="font-size:.75rem;color:var(--gray-600);margin-top:2px">Weekly pipeline report ready. $4.2M open, 7 deals closing this month ($312K). Forecast confidence: 87%.</div><div style="font-size:.65rem;color:var(--gray-600);margin-top:4px">This morning</div></div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -1490,6 +1619,15 @@ function setDashTab(id){
   document.querySelectorAll('.dash-panel').forEach(p=>p.classList.remove('active'));
   event.target.classList.add('active');
   document.getElementById('dash-'+id).classList.add('active');
+}
+
+// === LIGHTNING DASHBOARD TABS ===
+function setLightningTab(panelId,el){
+  document.querySelectorAll('.lt-panel').forEach(p=>{p.style.display='none';p.classList.remove('active')});
+  document.querySelectorAll('#ltSidebar .sidebar-item').forEach(s=>{s.style.color='rgba(255,255,255,.5)';s.style.background='transparent'});
+  const panel=document.getElementById(panelId);
+  if(panel){panel.style.display='block';panel.classList.add('active')}
+  if(el){el.style.color='rgba(255,255,255,.9)';el.style.background='rgba(255,255,255,.1)';el.style.borderRadius='6px'}
 }
 
 // === ROI CALCULATOR ===
